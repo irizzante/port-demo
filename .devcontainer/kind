@@ -94,3 +94,7 @@ spec:
   credentials:
     source: InjectedIdentity
 EOF
+
+helm install nginx --wait -n nginx --create-namespace -f nginx/values.yaml ingress-nginx/ingress-nginx
+
+helm upgrade --install argocd --wait -n argocd -f argocd/values.yaml --create-namespace argo/argo-cd --version 5.41.0
