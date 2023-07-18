@@ -1,0 +1,18 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Ubuntu",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "ghcr.io/irizzante/devcontainer-k8s:main",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+	"postStartCommand": "export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH ; ${containerWorkspaceFolder}/.devcontainer/kind",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Grafana.vscode-jsonnet"
+			]
+		}
+	}
+  }
+  
