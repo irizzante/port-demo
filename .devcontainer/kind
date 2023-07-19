@@ -95,12 +95,15 @@ spec:
     source: InjectedIdentity
 EOF
 
-helm upgrade --install argocd --wait -n argocd -f argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.0
+helm repo add argo https://argoproj.github.io/argo-helm
+helm upgrade --install argocd --wait -n argocd -f /workspaces/port-demo/argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.0
 
-helm upgrade --install nginx --wait -n nginx -f argocd/values/nginx.yaml --create-namespace ingress-nginx
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm upgrade --install nginx --wait -n nginx -f /workspaces/port-demo/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
 
 read -rsp 'Port Client ID:' portClientId
 read -rsp 'Port Client Secret:' portClientSecret
 
 kubectl -n kube-system create secret generic port --from-literal=PORT_CLIENT_ID="$portClientId" --from-literal=PORT_CLIENT_SECRET="$portClientSecret"
 
+kubectl apply -f /workspaces/port-demo/platform/
