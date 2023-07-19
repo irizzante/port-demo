@@ -1,0 +1,281 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xvclusters.irizzant.it
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: irizzant.it/v1alpha1
+    kind: XVCluster
+
+  resources:
+    - name: vcluster-helm-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          name: #patched
+          annotations:
+            crossplane.io/external-name: # patched
+        spec:
+          rollbackLimit: 3
+          providerConfigRef:
+            name: helm-provider
+          forProvider:
+            namespace: #patched
+            chart:
+              name: vcluster
+              repository: https://charts.loft.sh
+              version: "0.15.2"
+            values:
+              isolation:
+                enabled: true
+              sync:
+                nodes:
+                  enabled: true
+                  syncAllNodes: true
+                persistentvolumes:
+                  enabled: true
+                ingresses:
+                  enabled: true
+                networkpolicies:
+                  enabled: true
+              syncer:
+                extraArgs: [] # patched
+          
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.namespace
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.annotations[crossplane.io/external-name]
+          policy:
+            fromFieldPath: Required
+        - type: CombineFromComposite
+          policy:
+            fromFieldPath: Required
+          fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[0]
+          combine:
+            variables:
+              - fromFieldPath: spec.id
+              - fromFieldPath: spec.id
+            strategy: string
+            string:
+              fmt: "--out-kube-config-server=https://%s.%s-vcluster.svc.cluster.local"
+        - type: CombineFromComposite
+          policy:
+            fromFieldPath: Required
+          fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[1]
+          combine:
+            variables:
+              - fromFieldPath: spec.id
+              - fromFieldPath: spec.id
+            strategy: string
+            string:
+              fmt: "--tls-san=%s.%s-vcluster.svc.cluster.local"
+
+    - name: helm-provider-vcluster
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: ProviderConfig
+        metadata:
+          name: #patched
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              namespace: #patched
+              key: config
+              name: #patched
+
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-helm-provider"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.credentials.secretRef.namespace
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
+        # This ProviderConfig uses the above VCluster's connection secret as
+        # its credentials secret.
+        - fromFieldPath: spec.id
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "vc-%s"
+      readinessChecks:
+        - type: None
+
+    - name: k8s-provider-vcluster
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: ProviderConfig
+        metadata:
+          name: #patched
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              namespace: #patched
+              key: config
+              name: #patched
+
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-kubernetes-provider"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.credentials.secretRef.namespace
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
+        # This ProviderConfig uses the above VCluster's connection secret as
+        # its credentials secret.
+        - fromFieldPath: spec.id
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "vc-%s"
+      readinessChecks:
+        - type: None
+    
+    - name: secret-for-secret-store
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata:
+          name: #patched
+        spec:
+          references:
+          - dependsOn:
+              apiVersion: helm.crossplane.io/v1beta1
+              kind: Release
+              name: #patched
+          # Use patchesFrom to patch field from other k8s resource to this object
+          - patchesFrom:
+              apiVersion: v1
+              kind: Secret
+              name: #patched
+              namespace: kube-system
+              fieldPath: data
+            toFieldPath: data
+          providerConfigRef:
+            name: #patched
+          forProvider:
+            manifest:
+              apiVersion: v1
+              data: #patched
+              kind: Secret
+              metadata:
+                name: #patched
+                namespace: kube-system
+              type: Opaque
+      
+      patches:
+      - fromFieldPath: spec.id
+        toFieldPath: metadata.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-secret-store-secret"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.references[0].dependsOn.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-vcluster"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.providerConfigRef.name
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-kubernetes-provider"
+      - fromFieldPath: spec.gitOpsSecret
+        toFieldPath: spec.references[1].patchesFrom.name
+      - fromFieldPath: spec.gitOpsSecret
+        toFieldPath: spec.forProvider.manifest.metadata.name
+    
+    - name: gitops
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata:
+          name: #patched
+        spec:
+          references:
+          - dependsOn:
+              apiVersion: helm.crossplane.io/v1beta1
+              kind: Release
+              name: #patched
+          providerConfigRef:
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+              apiVersion: irizzant.it/v1alpha1
+              kind: XGitOps
+              metadata:
+                name: #patched
+              spec:
+                gitOpsRepo: #patched
+                gitOpsPath: #patched
+                providerConfigName:
+                    helm: #patched
+                    kubernetes: #patched
+
+      patches:
+      - fromFieldPath: spec.id
+        toFieldPath: metadata.name
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-gitops"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.references[0].dependsOn.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-vcluster"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.metadata.name
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-gitops"   
+      - fromFieldPath: spec.gitOpsRepo
+        toFieldPath: spec.forProvider.manifest.spec.gitOpsRepo
+      - fromFieldPath: spec.gitOpsPath
+        toFieldPath: spec.forProvider.manifest.spec.gitOpsPath
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.spec.providerConfigName.helm
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-helm-provider"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.spec.providerConfigName.kubernetes
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-kubernetes-provider"      
