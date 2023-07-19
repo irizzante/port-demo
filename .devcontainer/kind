@@ -104,6 +104,7 @@ helm upgrade --install nginx --wait -n nginx -f /workspaces/port-demo/argocd/val
 read -rsp 'Port Client ID:' portClientId
 read -rsp 'Port Client Secret:' portClientSecret
 
-kubectl -n kube-system create secret generic port --from-literal=PORT_CLIENT_ID="$portClientId" --from-literal=PORT_CLIENT_SECRET="$portClientSecret"
+kubectl create ns port
+kubectl -n port create secret generic port --from-literal=PORT_CLIENT_ID="$portClientId" --from-literal=PORT_CLIENT_SECRET="$portClientSecret"
 
 kubectl apply -f /workspaces/port-demo/platform/

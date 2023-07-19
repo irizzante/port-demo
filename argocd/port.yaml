@@ -6,21 +6,18 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    name: ''
     namespace: kube-system
     server: 'https://kubernetes.default.svc'
-  source:
-    path: ''
-    repoURL: 'https://port-labs.github.io/helm-charts'
+  sources:
+  - repoURL: 'https://port-labs.github.io/helm-charts'
     targetRevision: 0.1.18
     chart: port-k8s-exporter
     helm:
-      parameters: []
-      values: |-
-        secret:
-          useExistingSecret: true
-          name: port
-  sources: []
+      valueFiles:
+      - $values/argocd/values/port.yaml
+  - repoURL: 'https://github.com/irizzante/port-demo.git'
+    targetRevision: HEAD
+    ref: values
   project: default
   syncPolicy:
     automated:
