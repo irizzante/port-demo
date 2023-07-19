@@ -6,7 +6,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: kube-system
+    namespace: port
     server: 'https://kubernetes.default.svc'
   sources:
   - repoURL: 'https://port-labs.github.io/helm-charts'
