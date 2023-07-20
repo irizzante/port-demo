@@ -108,7 +108,8 @@ read -rsp 'Port Client Secret:' portClientSecret
 kubectl create ns port
 kubectl -n port create secret generic port --from-literal=PORT_CLIENT_ID="$portClientId" --from-literal=PORT_CLIENT_SECRET="$portClientSecret"
 
-read -rsp 'Gitlab token:' gitlabToken | echo
+read -rsp 'Gitlab token:' gitlabToken
+echo
 
 kubectl -n kube-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
 
