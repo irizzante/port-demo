@@ -8,11 +8,16 @@ spec:
   destination:
     namespace: eso
     server: 'https://kubernetes.default.svc'
-  source:
-    repoURL: 'https://charts.external-secrets.io'
+  sources:
+  - repoURL: 'https://charts.external-secrets.io'
     targetRevision: 0.9.1
     chart: external-secrets
-  sources: []
+    helm:
+      valueFiles:
+      - $values/argocd/values/eso.yaml
+  - repoURL: 'https://github.com/irizzante/port-demo.git'
+    targetRevision: HEAD
+    ref: values
   project: default
   syncPolicy:
     automated:
