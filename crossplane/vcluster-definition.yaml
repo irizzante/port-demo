@@ -42,7 +42,27 @@ spec:
                   enabled: true
               syncer:
                 extraArgs: [] # patched
-          
+              init:
+                helm:
+                - chart:
+                    name: argo-cd
+                    repo: https://argoproj.github.io/argo-helm
+                    version: 5.41.1
+                  release:
+                    name: argocd
+                    namespace: argocd
+
+          writeConnectionSecretToRef:
+            name: # patched
+            namespace: crossplane-system
+          connectionDetails:
+          - apiVersion: v1
+            kind: Secret
+            name: # patched
+            namespace: # patched
+            fieldPath: data.config
+            toConnectionSecretKey: config
+            skipPartOfReleaseCheck: true
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
@@ -84,6 +104,24 @@ spec:
             strategy: string
             string:
               fmt: "--tls-san=%s.%s-vcluster.svc.cluster.local"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.writeConnectionSecretToRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "vc-%s"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.connectionDetails[0].name
+          transforms:
+            - type: string
+              string:
+                fmt: "vc-%s"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.connectionDetails[0].namespace
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
 
     - name: helm-provider-vcluster
       base:
@@ -169,10 +207,6 @@ spec:
           name: #patched
         spec:
           references:
-          - dependsOn:
-              apiVersion: helm.crossplane.io/v1beta1
-              kind: Release
-              name: #patched
           # Use patchesFrom to patch field from other k8s resource to this object
           - patchesFrom:
               apiVersion: v1
@@ -201,81 +235,62 @@ spec:
           string:
             fmt: "%s-secret-store-secret"
       - fromFieldPath: spec.id
-        toFieldPath: spec.references[0].dependsOn.name
-        transforms:
-        - type: string
-          string:
-            fmt: "%s-vcluster"
-      - fromFieldPath: spec.id
         toFieldPath: spec.providerConfigRef.name
         transforms:
           - type: string
             string:
               fmt: "%s-kubernetes-provider"
       - fromFieldPath: spec.gitOpsSecret
-        toFieldPath: spec.references[1].patchesFrom.name
+        toFieldPath: spec.references[0].patchesFrom.name
       - fromFieldPath: spec.gitOpsSecret
         toFieldPath: spec.forProvider.manifest.metadata.name
     
-    - name: gitops
+    - name: argocd-platform-application
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         metadata:
           name: #patched
         spec:
-          references:
-          - dependsOn:
-              apiVersion: helm.crossplane.io/v1beta1
-              kind: Release
-              name: #patched
           providerConfigRef:
-            name: kubernetes-provider
+            name: #patched
           forProvider:
             manifest:
-              apiVersion: irizzant.it/v1alpha1
-              kind: XGitOps
+              apiVersion: argoproj.io/v1alpha1
+              kind: Application
               metadata:
-                name: #patched
+                name: platform
+                namespace: argocd
+                finalizers:
+                  - resources-finalizer.argocd.argoproj.io
               spec:
-                gitOpsRepo: #patched
-                gitOpsPath: #patched
-                providerConfigName:
-                    helm: #patched
-                    kubernetes: #patched
-
+                project: default
+                source:
+                  targetRevision: HEAD
+                  path: #patched
+                  repoUrl: #patched
+                destination:
+                  server: https://kubernetes.default.svc
+                  namespace: argocd
+                syncPolicy:
+                  automated:
+                    selfHeal: true
+                    prune: true
+                    allowEmpty: true
       patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-        transforms:
-          - type: string
-            string:
-              fmt: "%s-gitops"
-      - fromFieldPath: spec.id
-        toFieldPath: spec.references[0].dependsOn.name
-        transforms:
-        - type: string
-          string:
-            fmt: "%s-vcluster"
-      - fromFieldPath: spec.id
-        toFieldPath: spec.forProvider.manifest.metadata.name
-        transforms:
-          - type: string
-            string:
-              fmt: "%s-gitops"   
-      - fromFieldPath: spec.gitOpsRepo
-        toFieldPath: spec.forProvider.manifest.spec.gitOpsRepo
-      - fromFieldPath: spec.gitOpsPath
-        toFieldPath: spec.forProvider.manifest.spec.gitOpsPath
-      - fromFieldPath: spec.id
-        toFieldPath: spec.forProvider.manifest.spec.providerConfigName.helm
-        transforms:
-          - type: string
-            string:
-              fmt: "%s-helm-provider"
-      - fromFieldPath: spec.id
-        toFieldPath: spec.forProvider.manifest.spec.providerConfigName.kubernetes
-        transforms:
-          - type: string
-            string:
-              fmt: "%s-kubernetes-provider"      
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-argocd-platform-application"
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-kubernetes-provider"
+        - fromFieldPath: spec.gitOpsPath
+          toFieldPath: spec.forProvider.manifest.spec.source.path
+        - fromFieldPath: spec.gitOpsRepo
+          toFieldPath: spec.forProvider.manifest.spec.source.repoURL

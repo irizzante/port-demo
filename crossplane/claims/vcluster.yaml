@@ -3,6 +3,8 @@ kind: VCluster
 metadata:
   name: test
 spec:
+  writeConnectionSecretToRef:
+    name: test-vcluster
   id: test
   gitOpsRepo: https://github.com/irizzante/port-demo.git
   gitOpsPath: vcluster

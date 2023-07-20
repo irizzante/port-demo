@@ -10,6 +10,8 @@ spec:
   claimNames:
     kind: VCluster
     plural: vclusters
+  connectionSecretKeys:
+    - config
   versions:
     - name: v1alpha1
       served: true
