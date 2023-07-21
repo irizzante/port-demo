@@ -14,6 +14,7 @@ jobs:
       - name: Delete cluster
         run: |
           rm -rf vcluster/${{ inputs.name }}
+          rm argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
       - uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
