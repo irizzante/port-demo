@@ -26,9 +26,12 @@ jobs:
           mkdir -p vcluster/${{ inputs.name }}/argocd
           cp templates/argocd.yaml vcluster/${{ inputs.name }}/argocd
           find vcluster/${{ inputs.name }}/argocd -type f -exec sed -i 's@ARGOCD_HOST@${{ inputs.name }}-argocd.localtest.me@g' {} \;
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Create vcluster ${{ inputs.name }}
+      - name: Commit changes
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "Create cluster ${{ inputs.name }}"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
