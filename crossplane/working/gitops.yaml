@@ -11,108 +11,14 @@ spec:
   patchSets:
     - name: helm-provider-ref
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.providerConfigName.helm
           toFieldPath: spec.providerConfigRef.name
     - name: kubernetes-provider-ref
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.providerConfigName.kubernetes
           toFieldPath: spec.providerConfigRef.name
-    - name: kubernetes-provider-dependency
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.references[0].dependsOn.name
 
   resources:
-    - name: helm-provider
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: ProviderConfig
-        spec:
-          credentials:
-            source: Secret
-            secretRef:
-              key: kubeconfig
-              name: # patched
-              namespace: # patched
-
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-      - fromFieldPath: spec.kubeConfig.secretNamespace
-        toFieldPath: spec.credentials.secretRef.namespace
-      - fromFieldPath: spec.kubeConfig.secretName
-        toFieldPath: spec.credentials.secretRef.name
-      - fromFieldPath: spec.kubeConfig.secretKey
-        toFieldPath: spec.credentials.secretRef.key
-      readinessChecks:
-        - type: None
-
-    - name: k8s-provider
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: ProviderConfig
-        spec:
-          credentials:
-            source: Secret
-            secretRef:
-              key: kubeconfig
-              name: # patched
-              namespace: # patched
-
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-      - fromFieldPath: spec.kubeConfig.secretNamespace
-        toFieldPath: spec.credentials.secretRef.namespace
-      - fromFieldPath: spec.kubeConfig.secretName
-        toFieldPath: spec.credentials.secretRef.name
-      - fromFieldPath: spec.kubeConfig.secretKey
-        toFieldPath: spec.credentials.secretRef.key
-      readinessChecks:
-        - type: None
-    
-    - name: secret-for-secret-store
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata:
-          name: #patched
-        spec:
-          references:
-          # Use patchesFrom to patch field from other k8s resource to this object
-          - patchesFrom:
-              apiVersion: v1
-              kind: Secret
-              name: #patched
-              namespace: kube-system
-              fieldPath: data
-            toFieldPath: data
-          providerConfigRef:
-            name: #patched
-          forProvider:
-            manifest:
-              apiVersion: v1
-              data: #patched
-              kind: Secret
-              metadata:
-                name: #patched
-                namespace: kube-system
-              type: Opaque
-      
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-        transforms:
-        - type: string
-          string:
-            fmt: "%s-secret-store-secret"
-      - fromFieldPath: spec.id
-        toFieldPath: spec.providerConfigRef.name
-      - fromFieldPath: spec.gitOpsSecret
-        toFieldPath: spec.references[0].patchesFrom.name
-      - fromFieldPath: spec.gitOpsSecret
-        toFieldPath: spec.forProvider.manifest.metadata.name
-        
     - name: argocd-chart
       base:
         apiVersion: helm.crossplane.io/v1beta1
@@ -243,11 +149,6 @@ spec:
         spec:
           providerConfigRef:
             name: #patched
-          references:
-          - dependsOn:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: ProviderConfig
-              name: #patched
           forProvider:
             manifest:
               apiVersion: argoproj.io/v1alpha1
@@ -278,8 +179,6 @@ spec:
                 fmt: "%s-argocd-platform-project"
         - type: PatchSet
           patchSetName: kubernetes-provider-ref
-        - type: PatchSet
-          patchSetName: kubernetes-provider-dependency
 
     - name: argocd-platform-application
       base:
@@ -290,11 +189,6 @@ spec:
         spec:
           providerConfigRef:
             name: #patched
-          references:
-          - dependsOn:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: ProviderConfig
-              name: #patched
           forProvider:
             manifest:
               apiVersion: argoproj.io/v1alpha1
@@ -327,8 +221,6 @@ spec:
                 fmt: "%s-argocd-platform-application"
         - type: PatchSet
           patchSetName: kubernetes-provider-ref
-        - type: PatchSet
-          patchSetName: kubernetes-provider-dependency
         - fromFieldPath: spec.gitOpsPath
           toFieldPath: spec.forProvider.manifest.spec.source.path
         - fromFieldPath: spec.gitOpsRepo

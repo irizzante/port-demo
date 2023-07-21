@@ -13,7 +13,10 @@ spec:
     targetRevision: 5.41.1
     helm:
       valueFiles:
-      - $values/vcluster/values/argocd.yaml
+      - $values/argocd/values/argocd.yaml
+      parameters:
+      - name: server.ingress.hosts[0]
+        value: ARGOCD_HOST
   - repoURL: 'https://github.com/irizzante/port-demo.git'
     targetRevision: HEAD
     ref: values

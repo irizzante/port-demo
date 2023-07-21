@@ -21,24 +21,37 @@ spec:
           spec:
             type: object
             properties:
-              gitOpsRepo:
+              id:
                 type: string
-                description: URL of the Git repo for GitOps
-              gitOpsPath:
-                type: string
-                description: Path for GitOps
-              providerConfigName:
+                description: Identifier of this GitOps
+              kubeConfig:
                 type: object
                 properties:
-                  helm:
+                  secretName:
+                    description: The name of the secret with KubeConfig
                     type: string
-                  kubernetes:
+                  secretNamespace:
+                    description: The Namespace with the secret with KubeConfig
                     type: string
-                description: Name of a ProviderConfig to use
+                    default: crossplane-system
+                  secretKey:
+                    description: The key that contains kubeconfig
+                    type: string
+                    default: kubeconfig
                 required:
-                  - helm
-                  - kubernetes
+                - secretName
+              gitOpsRepo:
+                type: string
+                description: GitOps repo URL
+              gitOpsPath:
+                type: string
+                description: GitOps repo path
+              gitOpsSecret:
+                type: string
+                description: Name of the secret in the host cluster to replicate in the VCluster. Can be used to configure a ClusterStore for external-secrets
             required:
-            - providerConfigName
+            - id
+            - kubeConfig
             - gitOpsRepo
             - gitOpsPath
+            - gitOpsSecret
