@@ -14,7 +14,7 @@ jobs:
       - name: Create cluster
         run: |
           mkdir -p vcluster/${{ inputs.name }}
-          cp templates/argocd-vcluster-app.yaml argocd/
+          cp templates/argocd-vcluster-app.yaml argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
           sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/argocd-vcluster-app.yaml
           cp templates/gitops.yaml vcluster/${{ inputs.name }}/
           cp templates/vcluster.yaml vcluster/${{ inputs.name }}/
