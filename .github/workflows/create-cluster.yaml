@@ -15,7 +15,7 @@ jobs:
         run: |
           mkdir -p vcluster/${{ inputs.name }}
           cp templates/argocd-vcluster-app.yaml argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
-          sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/argocd-vcluster-app.yaml
+          sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
           cp templates/gitops.yaml vcluster/${{ inputs.name }}/
           cp templates/vcluster.yaml vcluster/${{ inputs.name }}/
           find vcluster/${{ inputs.name }} -type f -exec sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' {} \;
