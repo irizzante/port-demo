@@ -2,6 +2,8 @@ apiVersion: irizzant.it/v1alpha1
 kind: GitOps
 metadata:
     name: gitops
+    annotations:
+      argocd.argoproj.io/sync-wave: "5"
 spec:
   id: vcluster-CLUSTER_NAME
   kubeConfig:
