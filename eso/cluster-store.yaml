@@ -1,12 +1,12 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ClusterSecretStore
 metadata:
-  name: vclusters-secret-store
+  name: gitlab
 spec:
   provider:
     gitlab:
       groupIDs: 
-      - "68237223"
+      - "18304"
       auth:
         SecretRef:
           accessToken:
