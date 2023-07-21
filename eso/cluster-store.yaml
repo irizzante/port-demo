@@ -5,6 +5,7 @@ metadata:
 spec:
   provider:
     gitlab:
+      url: https://production.eng.it/gitlab
       groupIDs: 
       - "18304"
       auth:
