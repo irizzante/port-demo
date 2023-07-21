@@ -18,11 +18,11 @@ jobs:
           sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
           cp templates/gitops.yaml vcluster/${{ inputs.name }}/
           cp templates/vcluster.yaml vcluster/${{ inputs.name }}/
+          mkdir -p vcluster/${{ inputs.name }}/argocd
+          cp -r templates/apps/ vcluster/${{ inputs.name }}/argocd/
+          find vcluster/${{ inputs.name }}/argocd -type f -exec sed -i 's@ARGOCD_HOST@${{ inputs.name }}-argocd.localtest.me@g' {} \;
           find vcluster/${{ inputs.name }} -type f -exec sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' {} \;
           find vcluster/${{ inputs.name }} -type f -exec sed -i 's@GITOPS_PATH@vcluster/${{ inputs.name }}/argocd@g' {} \;
-          mkdir -p vcluster/${{ inputs.name }}/argocd
-          cp templates/argocd.yaml vcluster/${{ inputs.name }}/argocd
-          find vcluster/${{ inputs.name }}/argocd -type f -exec sed -i 's@ARGOCD_HOST@${{ inputs.name }}-argocd.localtest.me@g' {} \;
       - uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
