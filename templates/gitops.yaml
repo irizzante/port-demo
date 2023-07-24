@@ -1,7 +1,7 @@
 apiVersion: irizzant.it/v1alpha1
 kind: GitOps
 metadata:
-    name: gitops
+    name: gitops-CLUSTER_NAME
     annotations:
       argocd.argoproj.io/sync-wave: "5"
 spec:
