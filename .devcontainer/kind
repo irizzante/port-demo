@@ -96,17 +96,17 @@ spec:
 EOF
 
 helm repo add argo https://argoproj.github.io/argo-helm
-helm upgrade --install argocd --wait -n argocd -f /workspaces/port-demo/argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.0
+helm upgrade --install argocd --wait -n argocd -f /home/ivan/devcontainers/linux/port-demo/argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.0
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm upgrade --install nginx --wait -n nginx -f /workspaces/port-demo/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
+helm upgrade --install nginx --wait -n nginx -f /home/ivan/devcontainers/linux/port-demo/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
 
-source /workspaces/port-demo/credentials
+source /home/ivan/devcontainers/linux/port-demo/credentials
 
 kubectl create ns port
 
 kubectl -n kube-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
 
-kubectl apply -f /workspaces/port-demo/platform/
+kubectl apply -f /home/ivan/devcontainers/linux/port-demo/platform/
 
 kubectl apply -f crossplane/
