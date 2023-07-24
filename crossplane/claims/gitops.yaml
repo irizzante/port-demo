@@ -1,0 +1,14 @@
+apiVersion: irizzant.it/v1alpha1
+kind: GitOps
+metadata:
+    name: gitops
+    annotations:
+      argocd.argoproj.io/sync-wave: "5"
+spec:
+  id: vcluster-test
+  kubeConfig:
+    secretKey: config
+    secretName: vc-test
+  gitOpsRepo: https://github.com/irizzante/port-demo.git
+  gitOpsPath: vcluster
+  gitOpsSecret: gitlab-secret
