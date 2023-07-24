@@ -191,7 +191,7 @@ spec:
                         return hs
 
       patches:
-        - fromFieldPath: metadata.name
+        - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - type: string
