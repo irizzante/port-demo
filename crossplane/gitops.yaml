@@ -1,335 +1,57 @@
 apiVersion: apiextensions.crossplane.io/v1
-kind: Composition
+kind: CompositeResourceDefinition
 metadata:
   name: xgitops.irizzant.it
 spec:
-  writeConnectionSecretsToNamespace: crossplane-system
-  compositeTypeRef:
-    apiVersion: irizzant.it/v1alpha1
+  group: irizzant.it
+  names:
     kind: XGitOps
-
-  patchSets:
-    - name: helm-provider-ref
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: kubernetes-provider-ref
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: kubernetes-provider-dependency
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.references[0].dependsOn.name
-
-  resources:
-    - name: helm-provider
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: ProviderConfig
-        spec:
-          credentials:
-            source: Secret
-            secretRef:
-              key: kubeconfig
-              name: # patched
-              namespace: # patched
-
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-      - fromFieldPath: spec.kubeConfig.secretNamespace
-        toFieldPath: spec.credentials.secretRef.namespace
-      - fromFieldPath: spec.kubeConfig.secretName
-        toFieldPath: spec.credentials.secretRef.name
-      - fromFieldPath: spec.kubeConfig.secretKey
-        toFieldPath: spec.credentials.secretRef.key
-      readinessChecks:
-        - type: None
-
-    - name: k8s-provider
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: ProviderConfig
-        spec:
-          credentials:
-            source: Secret
-            secretRef:
-              key: kubeconfig
-              name: # patched
-              namespace: # patched
-
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-      - fromFieldPath: spec.kubeConfig.secretNamespace
-        toFieldPath: spec.credentials.secretRef.namespace
-      - fromFieldPath: spec.kubeConfig.secretName
-        toFieldPath: spec.credentials.secretRef.name
-      - fromFieldPath: spec.kubeConfig.secretKey
-        toFieldPath: spec.credentials.secretRef.key
-      readinessChecks:
-        - type: None
-    
-    - name: secret-for-secret-store
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata:
-          name: #patched
-        spec:
-          references:
-          # Use patchesFrom to patch field from other k8s resource to this object
-          - patchesFrom:
-              apiVersion: v1
-              kind: Secret
-              name: #patched
-              namespace: kube-system
-              fieldPath: data
-            toFieldPath: data
-          providerConfigRef:
-            name: #patched
-          forProvider:
-            manifest:
-              apiVersion: v1
-              data: #patched
-              kind: Secret
-              metadata:
-                name: #patched
-                namespace: kube-system
-              type: Opaque
-      
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-        transforms:
-        - type: string
-          string:
-            fmt: "%s-secret-store-secret"
-      - fromFieldPath: spec.id
-        toFieldPath: spec.providerConfigRef.name
-      - fromFieldPath: spec.gitOpsSecret
-        toFieldPath: spec.references[0].patchesFrom.name
-      - fromFieldPath: spec.gitOpsSecret
-        toFieldPath: spec.forProvider.manifest.metadata.name
-        
-    - name: argocd-chart
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        metadata:
-          name: #patched
-          annotations:
-            crossplane.io/external-name: argocd
-        spec:
-          providerConfigRef:
-            name: #patched
-          forProvider:
-            chart:
-              name: argo-cd
-              repository: https://argoproj.github.io/argo-helm
-              version: 5.34.6
-            namespace: argocd
-            values:
-              repoServer:
-                extraContainers:
-                - name: cmp-tanka
-                  image: curlimages/curl
-                  command: ['sh', 
-                  '-c', 
-                  'curl -Lo /home/argocd/cmp-server/plugins/jb https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v0.5.1/jb-linux-amd64 && curl -Lo /home/argocd/cmp-server/plugins/tk https://github.com/grafana/tanka/releases/download/v0.25.0/tk-linux-amd64 && chmod +x /home/argocd/cmp-server/plugins/jb && chmod +x /home/argocd/cmp-server/plugins/tk && /var/run/argocd/argocd-cmp-server']  
-                  securityContext:
-                    runAsNonRoot: true
-                    runAsUser: 999
-                  volumeMounts:
-                  - mountPath: /var/run/argocd
-                    name: var-files
-                  - mountPath: /home/argocd/cmp-server/plugins
-                    name: plugins
-                  - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-                    subPath: tanka.yaml
-                    name: argocd-cmp-cm
-                  - mountPath: /tmp
-                    name: cmp-tmp
-
-                volumes:
-                - name: argocd-cmp-cm
-                  configMap:
-                    name: argocd-cmp-cm
-                - name: cmp-tmp
-                  emptyDir: {}
-
-              configs:
-                cmp:
-                  create: true
-                  plugins:
-                    tanka:
-                      version: v1.0
-                      init:
-                        command: ['sh', '-c', '/home/argocd/cmp-server/plugins/jb install']
-                      generate:
-                        command:  [ 'sh', '-c', '/home/argocd/cmp-server/plugins/tk show environments/${ARGOCD_ENV_TK_ENV} ${ARGOCD_ENV_TK_EXTRA_ARGS} --dangerous-allow-redirect']
-                      discover:
-                        fileName: "**/k.libsonnet"
-
-                cm:
-                  application.resourceTrackingMethod: annotation
-                  resource.customizations: |
-                    argoproj.io/Application:
-                      health.lua: |
-                        hs = {}
-                        hs.status = "Progressing"
-                        hs.message = ""
-                        if obj.status ~= nil then
-                          if obj.status.health ~= nil then
-                            hs.status = obj.status.health.status
-                            if obj.status.health.message ~= nil then
-                              hs.message = obj.status.health.message
-                            end
-                          end
-                        end
-                        return hs
-
-      patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-argocd"
-        - type: PatchSet
-          patchSetName: helm-provider-ref
-
-    - name: argocd-repository
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata:
-          name: #patched
-        spec:
-          providerConfigRef:
-            name: #patched
-          forProvider:
-            manifest:
-              apiVersion: v1
-              kind: Secret
-              metadata:
-                name: repo
-                namespace: argocd
-                labels:
-                  argocd.argoproj.io/secret-type: repository
-              stringData:
-                type: git
-                url: #patched
-
-      patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-argocd-repository"
-        - type: PatchSet
-          patchSetName: kubernetes-provider-ref
-        - fromFieldPath: spec.gitOpsRepo
-          toFieldPath: spec.forProvider.manifest.stringData.url
-
-    - name: argocd-project
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata:
-          name: #patched
-        spec:
-          providerConfigRef:
-            name: #patched
-          references:
-          - dependsOn:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: ProviderConfig
-              name: #patched
-          forProvider:
-            manifest:
-              apiVersion: argoproj.io/v1alpha1
-              kind: AppProject
-              metadata:
-                name: platform
-                namespace: argocd
-              spec:
-                description: Platform team project
-                sourceRepos:
-                  - "*"
-                destinations:
-                  - namespace: "*"
-                    server: "https://kubernetes.default.svc"
-                clusterResourceWhitelist:
-                  - group: "*"
-                    kind: "*"
-                namespaceResourceWhitelist:
-                  - group: "*"
-                    kind: "*"
-
-      patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-argocd-platform-project"
-        - type: PatchSet
-          patchSetName: kubernetes-provider-ref
-        - type: PatchSet
-          patchSetName: kubernetes-provider-dependency
-
-    - name: argocd-platform-application
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        metadata:
-          name: #patched
-        spec:
-          providerConfigRef:
-            name: #patched
-          references:
-          - dependsOn:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: ProviderConfig
-              name: #patched
-          forProvider:
-            manifest:
-              apiVersion: argoproj.io/v1alpha1
-              kind: Application
-              metadata:
-                name: platform
-                namespace: argocd
-                finalizers:
-                  - resources-finalizer.argocd.argoproj.io
-              spec:
-                project: platform
-                source:
-                  targetRevision: HEAD
-                  path: #patched
-                  repoUrl: #patched
-                destination:
-                  server: https://kubernetes.default.svc
-                  namespace: argocd
-                syncPolicy:
-                  automated:
-                    selfHeal: true
-                    prune: true
-                    allowEmpty: true
-      patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: "%s-argocd-platform-application"
-        - type: PatchSet
-          patchSetName: kubernetes-provider-ref
-        - type: PatchSet
-          patchSetName: kubernetes-provider-dependency
-        - fromFieldPath: spec.gitOpsPath
-          toFieldPath: spec.forProvider.manifest.spec.source.path
-        - fromFieldPath: spec.gitOpsRepo
-          toFieldPath: spec.forProvider.manifest.spec.source.repoURL
+    plural: xgitops
+  claimNames:
+    kind: GitOps
+    plural: gitops
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Identifier of this GitOps
+              kubeConfig:
+                type: object
+                properties:
+                  secretName:
+                    description: The name of the secret with KubeConfig
+                    type: string
+                  secretNamespace:
+                    description: The Namespace with the secret with KubeConfig
+                    type: string
+                    default: crossplane-system
+                  secretKey:
+                    description: The key that contains kubeconfig
+                    type: string
+                    default: kubeconfig
+                required:
+                - secretName
+              gitOpsRepo:
+                type: string
+                description: GitOps repo URL
+              gitOpsPath:
+                type: string
+                description: GitOps repo path
+              gitOpsSecret:
+                type: string
+                description: Name of the secret in the host cluster to replicate in the VCluster. Can be used to configure a ClusterStore for external-secrets
+            required:
+            - id
+            - kubeConfig
+            - gitOpsRepo
+            - gitOpsPath
+            - gitOpsSecret
