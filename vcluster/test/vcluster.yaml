@@ -1,0 +1,8 @@
+apiVersion: irizzant.it/v1alpha1
+kind: VCluster
+metadata:
+  name: test
+spec:
+  writeConnectionSecretToRef:
+    name: test-vc
+  id: test
