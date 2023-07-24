@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: platform
+  sources:
+  - repoURL: 'https://argoproj.github.io/argo-helm'
+    chart: argo-cd
+    targetRevision: 5.41.1
+    helm:
+      valueFiles:
+      - $values/argocd/values/argocd.yaml
+      parameters:
+      - name: server.ingress.hosts[0]
+        value: test-argocd.localtest.me
+  - repoURL: 'https://github.com/irizzante/port-demo.git'
+    targetRevision: HEAD
+    ref: values
+    
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - PruneLast=true
+      - CreateNamespace=true
