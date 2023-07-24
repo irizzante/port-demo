@@ -259,7 +259,7 @@ spec:
                   - identifier: .metadata.name
                     title: .metadata.name
                     blueprint: '"cluster"'
-  project: platform
+  project: default
   syncPolicy:
     automated:
       prune: true
