@@ -41,6 +41,8 @@ spec:
                   - identifier: '"management"'
                     title: '"management"'
                     blueprint: '"cluster"'
+                    properties:
+                      gitops_repo: 
 
           - kind: apps/v1/deployments
             selector:
