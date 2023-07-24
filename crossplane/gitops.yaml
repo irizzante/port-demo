@@ -21,6 +21,14 @@ spec:
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.references[0].dependsOn.name
+    - name: release-dependency
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.references[1].dependsOn.name
+          transforms:
+          - type: string
+            string:
+              fmt: "%s-argocd"
 
   resources:
     - name: helm-provider
@@ -248,6 +256,10 @@ spec:
               apiVersion: kubernetes.crossplane.io/v1alpha1
               kind: ProviderConfig
               name: #patched
+          - dependsOn:
+              apiVersion: helm.crossplane.io/v1beta1
+              kind: Release
+              name: #patched
           forProvider:
             manifest:
               apiVersion: argoproj.io/v1alpha1
@@ -279,6 +291,8 @@ spec:
         - type: PatchSet
           patchSetName: kubernetes-provider-ref
         - type: PatchSet
+          patchSetName: release-dependency
+        - type: PatchSet
           patchSetName: kubernetes-provider-dependency
 
     - name: argocd-platform-application
@@ -294,6 +308,10 @@ spec:
           - dependsOn:
               apiVersion: kubernetes.crossplane.io/v1alpha1
               kind: ProviderConfig
+              name: #patched
+          - dependsOn:
+              apiVersion: helm.crossplane.io/v1beta1
+              kind: Release
               name: #patched
           forProvider:
             manifest:
@@ -329,6 +347,8 @@ spec:
           patchSetName: kubernetes-provider-ref
         - type: PatchSet
           patchSetName: kubernetes-provider-dependency
+        - type: PatchSet
+          patchSetName: release-dependency
         - fromFieldPath: spec.gitOpsPath
           toFieldPath: spec.forProvider.manifest.spec.source.path
         - fromFieldPath: spec.gitOpsRepo
