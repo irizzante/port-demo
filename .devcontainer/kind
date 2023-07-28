@@ -64,8 +64,6 @@ crossplane-stable/crossplane \
 
 kubectl wait --for condition=ready pod --namespace crossplane-system --all --timeout 300s
 
-kubectl apply -f https://raw.githubusercontent.com/irizzante/crossplane/main/crossplane/configurations/gitops.yaml
-
 sleep 10
 
 kubectl wait --for condition=ready pod --namespace crossplane-system --all --timeout 300s
