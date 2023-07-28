@@ -27,6 +27,9 @@ spec:
               gitOpsPath:
                 type: string
                 description: Path for GitOps
+              gitOpsSecret:
+                type: string
+                description: Name of the secret in the host cluster to replicate in the VCluster. Can be used to configure a ClusterStore for external-secrets
               providerConfigName:
                 type: object
                 properties:
@@ -42,3 +45,4 @@ spec:
             - providerConfigName
             - gitOpsRepo
             - gitOpsPath
+            - gitOpsSecret

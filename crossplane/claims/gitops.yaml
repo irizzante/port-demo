@@ -5,10 +5,9 @@ metadata:
     annotations:
       argocd.argoproj.io/sync-wave: "5"
 spec:
-  id: vcluster-test
-  kubeConfig:
-    secretKey: config
-    secretName: vc-test
+  providerConfigName:
+    helm: test
+    kubernetes: test
   gitOpsRepo: https://github.com/irizzante/port-demo.git
   gitOpsPath: vcluster
   gitOpsSecret: gitlab-secret

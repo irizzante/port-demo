@@ -4,5 +4,5 @@ metadata:
   name: test
 spec:
   writeConnectionSecretToRef:
-    name: test-vc
+    name: vc-test
   id: test

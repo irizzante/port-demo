@@ -19,6 +19,48 @@ spec:
           toFieldPath: spec.providerConfigRef.name
 
   resources:
+    - name: secret-for-secret-store
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata:
+          name: #patched
+        spec:
+          references:
+          # Use patchesFrom to patch field from other k8s resource to this object
+          - patchesFrom:
+              apiVersion: v1
+              kind: Secret
+              name: #patched
+              namespace: kube-system
+              fieldPath: data
+            toFieldPath: data
+          providerConfigRef:
+            name: #patched
+          forProvider:
+            manifest:
+              apiVersion: v1
+              data: #patched
+              kind: Secret
+              metadata:
+                name: #patched
+                namespace: kube-system
+              type: Opaque
+      
+      patches:
+      - fromFieldPath: metadata.name
+        toFieldPath: metadata.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-secret-store-secret"
+      - type: PatchSet
+        patchSetName: kubernetes-provider-ref
+      - fromFieldPath: spec.gitOpsSecret
+        toFieldPath: spec.references[0].patchesFrom.name
+      - fromFieldPath: spec.gitOpsSecret
+        toFieldPath: spec.forProvider.manifest.metadata.name
+
     - name: argocd-chart
       base:
         apiVersion: helm.crossplane.io/v1beta1
@@ -189,6 +231,11 @@ spec:
         spec:
           providerConfigRef:
             name: #patched
+          references:
+          - dependsOn:
+              apiVersion: kubernetes.crossplane.io/v1alpha1
+              kind: Object
+              name: #patched
           forProvider:
             manifest:
               apiVersion: argoproj.io/v1alpha1
@@ -212,6 +259,7 @@ spec:
                     selfHeal: true
                     prune: true
                     allowEmpty: true
+                    
       patches:
         - fromFieldPath: metadata.name
           toFieldPath: metadata.name
@@ -225,3 +273,9 @@ spec:
           toFieldPath: spec.forProvider.manifest.spec.source.path
         - fromFieldPath: spec.gitOpsRepo
           toFieldPath: spec.forProvider.manifest.spec.source.repoURL
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.references[0].dependsOn.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-argocd-platform-project"
