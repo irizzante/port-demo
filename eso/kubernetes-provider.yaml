@@ -48,7 +48,12 @@ spec:
   provider:
     kubernetes:
       remoteNamespace: argocd
-      server: kubernetes.default.svc.cluster.local
+      server: 
+        url: kubernetes.default.svc.cluster.local
+        caProvider:
+          type: ConfigMap
+          name: kube-root-ca.crt
+          key: ca.crt
       auth:
         serviceAccount:
           name: "kubernetes-eso-store"
