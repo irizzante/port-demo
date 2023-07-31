@@ -57,3 +57,4 @@ spec:
       auth:
         serviceAccount:
           name: "kubernetes-eso-store"
+          namespace: crossplane-system
