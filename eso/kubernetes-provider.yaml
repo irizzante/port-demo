@@ -1,5 +1,5 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   namespace: argocd
   name: eso-store-role
@@ -23,14 +23,13 @@ kind: ServiceAccount
 metadata:
   creationTimestamp: null
   name: kubernetes-eso-store
-  namespace: argocd
+  namespace: crossplane-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   creationTimestamp: null
   name: kubernetes-eso-store
-  namespace: argocd
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
