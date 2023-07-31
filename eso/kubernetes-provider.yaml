@@ -30,6 +30,7 @@ kind: RoleBinding
 metadata:
   creationTimestamp: null
   name: kubernetes-eso-store
+  namespace: argocd
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -54,6 +55,7 @@ spec:
           type: ConfigMap
           name: kube-root-ca.crt
           key: ca.crt
+          namespace: kube-system
       auth:
         serviceAccount:
           name: "kubernetes-eso-store"
