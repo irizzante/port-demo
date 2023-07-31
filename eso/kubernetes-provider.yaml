@@ -38,3 +38,17 @@ subjects:
 - kind: ServiceAccount
   name: kubernetes-eso-store
   namespace: argocd
+---
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: k8s-store-sa-auth
+  namespace: argocd
+spec:
+  provider:
+    kubernetes:
+      remoteNamespace: argocd
+      server: kubernetes.default.svc.cluster.local
+      auth:
+        serviceAccount:
+          name: "kubernetes-eso-store"
