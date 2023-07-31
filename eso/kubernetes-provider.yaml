@@ -46,7 +46,7 @@ metadata:
 spec:
   provider:
     kubernetes:
-      remoteNamespace: argocd
+      remoteNamespace: crossplane-system
       server: 
         url: kubernetes.default.svc.cluster.local
         caProvider:
