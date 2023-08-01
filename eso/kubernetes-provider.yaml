@@ -56,4 +56,3 @@ spec:
       auth:
         serviceAccount:
           name: "kubernetes-eso-store"
-          namespace: argocd
