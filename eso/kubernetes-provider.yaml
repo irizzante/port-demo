@@ -1,7 +1,6 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  namespace: argocd
   name: eso-store-role
 rules:
 - apiGroups: [""]
@@ -23,7 +22,7 @@ kind: ServiceAccount
 metadata:
   creationTimestamp: null
   name: kubernetes-eso-store
-  namespace: crossplane-system
+  namespace: argocd
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -37,12 +36,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: kubernetes-eso-store
-  namespace: crossplane-system
+  namespace: argocd
 ---
 apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
+kind: SecretStore
 metadata:
   name: k8s-store-sa-auth
+  namespace: argocd
 spec:
   provider:
     kubernetes:
@@ -53,8 +53,7 @@ spec:
           type: ConfigMap
           name: kube-root-ca.crt
           key: ca.crt
-          namespace: kube-system
       auth:
         serviceAccount:
           name: "kubernetes-eso-store"
-          namespace: crossplane-system
+          namespace: argocd
