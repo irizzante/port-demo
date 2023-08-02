@@ -206,4 +206,84 @@ spec:
       readinessChecks:
         - type: None
     
+    - name: argocd-cluster-secret
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        metadata:
+          name: #patched
+        spec:
+          providerConfigRef: 
+            name: kubernetes-provider
+          forProvider:
+            manifest:
+              apiVersion: external-secrets.io/v1beta1
+              kind: ExternalSecret
+              metadata:
+                name: #patched
+                namespace: argocd
+              spec:
+                refreshInterval: 5m
+                secretStoreRef:
+                  kind: SecretStore
+                  name: k8s-store-sa-auth
+                target:
+                  name: #patched
+                  # this is how the Kind=Secret will look like
+                  template:
+                    engineVersion: v2
+                    metadata:
+                      labels:
+                        argocd.argoproj.io/secret-type: cluster
+                    data:
+                      name: #patched
+                      server: |
+                        "{{ (index (.data | fromYaml).clusters 0 "cluster" "server") }}"
+                      config: |
+                        {
+                          "tlsClientConfig": {
+                            "insecure": false,
+                            "caData": "{{ (index (.data | fromYaml).clusters 0 "cluster" "certificate-authority-data") }}",
+                            "certData": "{{ (index (.data | fromYaml).users 0 "user" "client-certificate-data") }}",
+                            "keyData": "{{ (index (.data | fromYaml).users 0 "user" "client-key-data") }}"
+                          }
+                        }
+                data:
+                - secretKey: data
+                  remoteRef:
+                    key: #patched
+                    property: config
+
+      patches:
+      - fromFieldPath: spec.id
+        toFieldPath: metadata.name
+        transforms:
+            - type: string
+              string:
+                fmt: "%s-argocd-cluster-credentials"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.metadata.name
+        transforms:
+            - type: string
+              string:
+                fmt: "%s-argocd-cluster-credentials"  
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.spec.target.name
+        transforms:
+            - type: string
+              string:
+                fmt: "%s-argocd-cluster-credentials"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.spec.target.template.data.name
+        transforms:
+            - type: string
+              string:
+                fmt: "%s"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.manifest.spec.data[0].remoteRef.key
+        transforms:
+            - type: string
+              string:
+                fmt: "vc-%s"
+        
   
