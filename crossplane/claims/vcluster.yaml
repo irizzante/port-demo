@@ -6,4 +6,4 @@ spec:
   writeConnectionSecretToRef:
     name: vc-test
   id: test
-  hostDomain: 172.17.0.2.nip.io
+  hostDomain: 172.19.0.2.nip.io
