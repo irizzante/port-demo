@@ -198,6 +198,8 @@ spec:
               metadata:
                 name: platform
                 namespace: argocd
+                finalizers:
+                  - resources-finalizer.argocd.argoproj.io
               spec:
                 description: Platform team project
                 sourceRepos:
@@ -253,12 +255,14 @@ spec:
                   repoUrl: #patched
                 destination:
                   server: https://kubernetes.default.svc
-                  namespace: argocd
+                  namespace: platform
                 syncPolicy:
                   automated:
                     selfHeal: true
                     prune: true
                     allowEmpty: true
+                  syncOptions:
+                  - CreateNamespace=true
                     
       patches:
         - fromFieldPath: metadata.name

@@ -26,5 +26,9 @@ spec:
                 id:
                   type: string
                   description: ID of this VCluster, used as reference by other objects
+                hostDomain:
+                  type: string
+                  description: Host cluster domain
               required:
                 - id
+                - hostDomain

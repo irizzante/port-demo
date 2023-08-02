@@ -28,6 +28,11 @@ spec:
               repository: https://charts.loft.sh
               version: "0.15.2"
             values:
+              kubernetesVersion: 1.27.3
+              ingress:
+                enabled: true
+                ingressClassName: nginx
+                host: #patched
               isolation:
                 enabled: true
               sync:
@@ -42,16 +47,6 @@ spec:
                   enabled: true
               syncer:
                 extraArgs: [] # patched
-              init:
-                helm:
-                - chart:
-                    name: argo-cd
-                    repo: https://argoproj.github.io/argo-helm
-                    version: 5.41.1
-                  release:
-                    name: argocd
-                    namespace: argocd
-
           writeConnectionSecretToRef:
             name: # patched
             namespace: crossplane-system
@@ -83,19 +78,17 @@ spec:
         - type: CombineFromComposite
           policy:
             fromFieldPath: Required
-          fromFieldPath: spec.id
           toFieldPath: spec.forProvider.values.syncer.extraArgs[0]
           combine:
             variables:
               - fromFieldPath: spec.id
-              - fromFieldPath: spec.id
+              - fromFieldPath: spec.hostDomain
             strategy: string
             string:
-              fmt: "--out-kube-config-server=https://%s.%s-vcluster.svc.cluster.local"
+              fmt: "--out-kube-config-server=https://%s.%s"
         - type: CombineFromComposite
           policy:
             fromFieldPath: Required
-          fromFieldPath: spec.id
           toFieldPath: spec.forProvider.values.syncer.extraArgs[1]
           combine:
             variables:
@@ -104,6 +97,17 @@ spec:
             strategy: string
             string:
               fmt: "--tls-san=%s.%s-vcluster.svc.cluster.local"
+        - type: CombineFromComposite
+          policy:
+            fromFieldPath: Required
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[2]
+          combine:
+            variables:
+              - fromFieldPath: spec.id
+              - fromFieldPath: spec.hostDomain
+            strategy: string
+            string:
+              fmt: "--tls-san=%s.%s"
         - fromFieldPath: spec.id
           toFieldPath: spec.writeConnectionSecretToRef.name
           transforms:
@@ -122,6 +126,17 @@ spec:
             - type: string
               string:
                 fmt: "%s-vcluster"
+        - type: CombineFromComposite
+          policy:
+            fromFieldPath: Required
+          toFieldPath: spec.forProvider.values.ingress.host
+          combine:
+            variables:
+              - fromFieldPath: spec.id
+              - fromFieldPath: spec.hostDomain
+            strategy: string
+            string:
+              fmt: "%s.%s"
 
     - name: helm-provider-vcluster
       base:
