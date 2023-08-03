@@ -48,7 +48,8 @@ spec:
                         blueprint: '"cluster"'
                         properties:
                           gitops_repo: '"https://production.eng.it/gitlab/dirseresl/demo-crossplane/port-demo.git"'
-                          team: ['"Platform"']
+                          team:
+                          - '"Platform"'
 
               - kind: apps/v1/deployments
                 selector:
@@ -266,7 +267,8 @@ spec:
                         title: .metadata.name
                         blueprint: '"cluster"'
                         properties:
-                          team: [.spec.team]
+                          team: 
+                          - .spec.team
   project: default
   syncPolicy:
     automated:
