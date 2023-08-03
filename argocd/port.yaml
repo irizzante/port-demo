@@ -39,7 +39,7 @@ spec:
 
               - kind: v1/namespaces
                 selector:
-                  query: .metadata.name | contains("kube-system")
+                  query: .metadata.name == "kube-system"
                 port:
                   entity:
                     mappings:
