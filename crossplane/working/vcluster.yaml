@@ -238,7 +238,7 @@ spec:
                     data:
                       name: #patched
                       server: |
-                        "{{ (index (.data | fromYaml).clusters 0 "cluster" "server") }}"
+                        {{ (index (.data | fromYaml).clusters 0 "cluster" "server") }}
                       config: |
                         {
                           "tlsClientConfig": {
