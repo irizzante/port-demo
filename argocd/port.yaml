@@ -47,8 +47,8 @@ spec:
                         title: '"management"'
                         blueprint: '"cluster"'
                         properties:
-                          gitops_repo: https://production.eng.it/gitlab/dirseresl/demo-crossplane/port-demo.git
-                          team: Platform
+                          gitops_repo: 'https://production.eng.it/gitlab/dirseresl/demo-crossplane/port-demo.git'
+                          team: 'Platform'
 
               - kind: apps/v1/deployments
                 selector:
