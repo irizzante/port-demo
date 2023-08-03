@@ -19,7 +19,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create cluster
         run: |
-          rm -rf vcluster/${{ inputs.name }}
           mkdir -p vcluster/${{ inputs.name }}
           cp templates/argocd-vcluster-app.yaml argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
           sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
