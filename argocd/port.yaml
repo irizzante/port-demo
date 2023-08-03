@@ -265,7 +265,8 @@ spec:
                       - identifier: .metadata.name
                         title: .metadata.name
                         blueprint: '"cluster"'
-                        team: .spec.team
+                        properties:
+                          team: .spec.team
   project: default
   syncPolicy:
     automated:
