@@ -6,3 +6,5 @@ spec:
   writeConnectionSecretToRef:
     name: CLUSTER_NAME-vc
   id: CLUSTER_NAME
+  hostDomain: HOST_DOMAIN
+  team: TEAM
