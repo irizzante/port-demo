@@ -5,6 +5,14 @@ if kind get clusters -q | grep crossplane; then
   exit 0
 fi
 
+cd "$(dirname "$0")" || exit
+
+cd ..
+
+workspaceDir="$PWD"
+
+cd - > /dev/null || exit
+
 cat <<EOF | kind create cluster --name crossplane --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -96,17 +104,17 @@ spec:
 EOF
 
 helm repo add argo https://argoproj.github.io/argo-helm
-helm upgrade --install argocd --wait -n argocd -f /workspaces/port-demo/argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.0
+helm upgrade --install argocd --wait -n argocd -f "$workspaceDir"/argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.1
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm upgrade --install nginx --wait -n nginx -f /workspaces/port-demo/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
+helm upgrade --install nginx --wait -n nginx -f "$workspaceDir"/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
 
-source /workspaces/port-demo/credentials
+source "$workspaceDir"/credentials
 
 kubectl create ns port
 
 kubectl -n kube-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
 
-kubectl apply -f /workspaces/port-demo/platform/
+kubectl apply -f "$workspaceDir"/platform/
 
-kubectl apply -f crossplane/
+kubectl apply -f "$workspaceDir"/crossplane/
