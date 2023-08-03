@@ -11,6 +11,9 @@ on:
       team:
         required: true
         description: "The team the cluster belongs to"
+      port_payload:
+        required: true
+        description: "The Port payload"
         
 jobs:
   deploy-app:
