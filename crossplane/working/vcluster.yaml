@@ -237,8 +237,7 @@ spec:
                         argocd.argoproj.io/secret-type: cluster
                     data:
                       name: #patched
-                      server: |
-                        {{ (index (.data | fromYaml).clusters 0 "cluster" "server") }}
+                      server: '{{ (index (.data | fromYaml).clusters 0 "cluster" "server") }}'
                       config: |
                         {
                           "tlsClientConfig": {
