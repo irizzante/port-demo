@@ -6,7 +6,7 @@ on:
         required: true
         description: "The name of the cluster"
       port_payload:
-        required: true
+        required: false
         description: "The Port payload"
       
 jobs:
