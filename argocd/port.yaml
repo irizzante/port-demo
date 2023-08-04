@@ -14,6 +14,7 @@ spec:
     chart: port-k8s-exporter
     helm:
       values: |
+        stateKey: management
         # Base Kubernetes configuration
         secret:
           useExistingSecret: true
