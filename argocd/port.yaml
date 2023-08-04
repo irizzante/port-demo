@@ -278,7 +278,7 @@ spec:
                         title: (.metadata.name | split("-"))[1]
                         blueprint: '"cluster"'
                         properties:
-                          kubeconfig: .data.config
+                          kubeconfig: .data.config | @base64d
                         
   project: default
   syncPolicy:
