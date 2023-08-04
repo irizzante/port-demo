@@ -13,6 +13,9 @@ workspaceDir="$PWD"
 
 cd - > /dev/null || exit
 
+# shellcheck source=/dev/null
+source "$workspaceDir"/credentials
+
 cat <<EOF | kind create cluster --name crossplane --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -22,6 +25,9 @@ networking:
   disableDefaultCNI: true
 nodes:
 - role: control-plane
+  extraMounts:
+  - containerPath: /var/lib/kubelet/config.json
+    hostPath: ~/.docker/config.json
   extraPortMappings:
     - containerPort: 443
       hostPort: 443
@@ -76,6 +82,8 @@ kubectl apply -f https://raw.githubusercontent.com/irizzante/crossplane/main/cro
 
 sleep 10
 
+kubectl delete configuration gitops
+
 kubectl wait --for condition=ready pod --namespace crossplane-system --all --timeout 300s
 
 SA=$(kubectl -n crossplane-system get sa -o name | grep provider-kubernetes | sed -e 's|serviceaccount\/|crossplane-system:|g')
@@ -108,8 +116,6 @@ helm upgrade --install argocd --wait -n argocd -f "$workspaceDir"/argocd/values/
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm upgrade --install nginx --wait -n nginx -f "$workspaceDir"/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
-
-source "$workspaceDir"/credentials
 
 kubectl create ns port
 
