@@ -27,7 +27,7 @@ nodes:
 - role: control-plane
   extraMounts:
   - containerPath: /var/lib/kubelet/config.json
-    hostPath: ~/.docker/config.json
+    hostPath: "$HOME/.docker/config.json"
   extraPortMappings:
     - containerPort: 443
       hostPort: 443
