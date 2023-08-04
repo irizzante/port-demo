@@ -268,6 +268,17 @@ spec:
                         title: .metadata.name
                         blueprint: '"cluster"'
                         team: '[.spec.team]'
+              - kind: v1/secrets
+                selector:
+                  query: '(.metadata.namespace | startswith("crossplane") and (.type == "connection.crossplane.io/v1alpha1") and (.data | contains("config"))'
+                port:
+                  entity:
+                    mappings:
+                      - identifier: (.metadata.name | split("-"))[1]
+                        title: (.metadata.name | split("-"))[1]
+                        blueprint: '"cluster"'
+                        properties:
+                          kubeconfig: .data.config
                         
   project: default
   syncPolicy:
