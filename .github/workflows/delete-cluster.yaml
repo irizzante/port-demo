@@ -1,20 +1,20 @@
-name: Delete a cluster
+name: Delete a vcluster
 on:
   workflow_dispatch:
     inputs:
       name:
         required: true
-        description: "The name of the cluster"
+        description: "The name of the vcluster"
       port_payload:
         required: false
         description: "The Port payload"
       
 jobs:
-  delete-cluster:
+  delete-vcluster:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Delete cluster
+      - name: Delete vcluster
         run: |
           rm argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
           rm -rf vcluster/${{ inputs.name }}
