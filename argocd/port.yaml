@@ -15,6 +15,7 @@ spec:
     helm:
       values: |
         stateKey: management
+        resyncInterval: 1
         # Base Kubernetes configuration
         secret:
           useExistingSecret: true
