@@ -270,7 +270,7 @@ spec:
                         team: '[.spec.team]'
               - kind: v1/secrets
                 selector:
-                  query: '(.metadata.namespace | startswith("crossplane")) and (.type == "connection.crossplane.io/v1alpha1") and (.data | contains("config"))'
+                  query: '(.metadata.namespace | startswith("crossplane")) and (.type == "connection.crossplane.io/v1alpha1") and (.data | has("config"))'
                 port:
                   entity:
                     mappings:
