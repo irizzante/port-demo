@@ -26,5 +26,17 @@ spec:
                 id:
                   type: string
                   description: ID of this VCluster, used as reference by other objects
+                kubernetesVersion:
+                  type: string
+                  description: Kubernetes version to use
+                  default: v1.27.3
+                hostDomain:
+                  type: string
+                  description: Host cluster domain
+                team:
+                  type: string
+                  description: The team this cluster belongs to
               required:
                 - id
+                - hostDomain
+                - team

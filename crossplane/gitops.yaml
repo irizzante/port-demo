@@ -11,74 +11,14 @@ spec:
   patchSets:
     - name: helm-provider-ref
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.providerConfigName.helm
           toFieldPath: spec.providerConfigRef.name
     - name: kubernetes-provider-ref
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.providerConfigName.kubernetes
           toFieldPath: spec.providerConfigRef.name
-    - name: kubernetes-provider-dependency
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.references[0].dependsOn.name
-    - name: release-dependency
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.references[1].dependsOn.name
-          transforms:
-          - type: string
-            string:
-              fmt: "%s-argocd"
 
   resources:
-    - name: helm-provider
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: ProviderConfig
-        spec:
-          credentials:
-            source: Secret
-            secretRef:
-              key: kubeconfig
-              name: # patched
-              namespace: # patched
-
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-      - fromFieldPath: spec.kubeConfig.secretNamespace
-        toFieldPath: spec.credentials.secretRef.namespace
-      - fromFieldPath: spec.kubeConfig.secretName
-        toFieldPath: spec.credentials.secretRef.name
-      - fromFieldPath: spec.kubeConfig.secretKey
-        toFieldPath: spec.credentials.secretRef.key
-      readinessChecks:
-        - type: None
-
-    - name: k8s-provider
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: ProviderConfig
-        spec:
-          credentials:
-            source: Secret
-            secretRef:
-              key: kubeconfig
-              name: # patched
-              namespace: # patched
-
-      patches:
-      - fromFieldPath: spec.id
-        toFieldPath: metadata.name
-      - fromFieldPath: spec.kubeConfig.secretNamespace
-        toFieldPath: spec.credentials.secretRef.namespace
-      - fromFieldPath: spec.kubeConfig.secretName
-        toFieldPath: spec.credentials.secretRef.name
-      - fromFieldPath: spec.kubeConfig.secretKey
-        toFieldPath: spec.credentials.secretRef.key
-      readinessChecks:
-        - type: None
-    
     - name: secret-for-secret-store
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -108,19 +48,19 @@ spec:
               type: Opaque
       
       patches:
-      - fromFieldPath: spec.id
+      - fromFieldPath: metadata.name
         toFieldPath: metadata.name
         transforms:
         - type: string
           string:
             fmt: "%s-secret-store-secret"
-      - fromFieldPath: spec.id
-        toFieldPath: spec.providerConfigRef.name
+      - type: PatchSet
+        patchSetName: kubernetes-provider-ref
       - fromFieldPath: spec.gitOpsSecret
         toFieldPath: spec.references[0].patchesFrom.name
       - fromFieldPath: spec.gitOpsSecret
         toFieldPath: spec.forProvider.manifest.metadata.name
-        
+
     - name: argocd-chart
       base:
         apiVersion: helm.crossplane.io/v1beta1
@@ -199,7 +139,7 @@ spec:
                         return hs
 
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
           transforms:
             - type: string
@@ -251,15 +191,6 @@ spec:
         spec:
           providerConfigRef:
             name: #patched
-          references:
-          - dependsOn:
-              apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: ProviderConfig
-              name: #patched
-          - dependsOn:
-              apiVersion: helm.crossplane.io/v1beta1
-              kind: Release
-              name: #patched
           forProvider:
             manifest:
               apiVersion: argoproj.io/v1alpha1
@@ -267,6 +198,8 @@ spec:
               metadata:
                 name: platform
                 namespace: argocd
+                finalizers:
+                  - resources-finalizer.argocd.argoproj.io
               spec:
                 description: Platform team project
                 sourceRepos:
@@ -290,10 +223,6 @@ spec:
                 fmt: "%s-argocd-platform-project"
         - type: PatchSet
           patchSetName: kubernetes-provider-ref
-        - type: PatchSet
-          patchSetName: release-dependency
-        - type: PatchSet
-          patchSetName: kubernetes-provider-dependency
 
     - name: argocd-platform-application
       base:
@@ -307,11 +236,7 @@ spec:
           references:
           - dependsOn:
               apiVersion: kubernetes.crossplane.io/v1alpha1
-              kind: ProviderConfig
-              name: #patched
-          - dependsOn:
-              apiVersion: helm.crossplane.io/v1beta1
-              kind: Release
+              kind: Object
               name: #patched
           forProvider:
             manifest:
@@ -330,12 +255,15 @@ spec:
                   repoUrl: #patched
                 destination:
                   server: https://kubernetes.default.svc
-                  namespace: argocd
+                  namespace: platform
                 syncPolicy:
                   automated:
                     selfHeal: true
                     prune: true
                     allowEmpty: true
+                  syncOptions:
+                  - CreateNamespace=true
+                    
       patches:
         - fromFieldPath: metadata.name
           toFieldPath: metadata.name
@@ -345,11 +273,13 @@ spec:
                 fmt: "%s-argocd-platform-application"
         - type: PatchSet
           patchSetName: kubernetes-provider-ref
-        - type: PatchSet
-          patchSetName: kubernetes-provider-dependency
-        - type: PatchSet
-          patchSetName: release-dependency
         - fromFieldPath: spec.gitOpsPath
           toFieldPath: spec.forProvider.manifest.spec.source.path
         - fromFieldPath: spec.gitOpsRepo
           toFieldPath: spec.forProvider.manifest.spec.source.repoURL
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.references[0].dependsOn.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-argocd-platform-project"
