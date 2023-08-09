@@ -15,7 +15,7 @@ jobs:
         id: entity-id
         uses: sergeysova/jq-action@v2
         with:
-          cmd: "${{ inputs.port_payload }} | jq .payload.entity.identifier -r"
+          cmd: '${{ inputs.port_payload }} | jq .payload.entity.identifier -r'
       - name: Delete vcluster
         run: |
           echo ${{ inputs.port_payload }}
