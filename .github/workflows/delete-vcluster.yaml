@@ -15,10 +15,11 @@ jobs:
         id: entity-id
         uses: sergeysova/jq-action@v2
         with:
-          cmd: '${{ inputs.port_payload }} | jq .payload.entity.identifier -r'
+          cmd: 'echo ${{ inputs.port_payload }} | jq .payload.entity.identifier -r'
+
       - name: Delete vcluster
         run: |
-          echo ${{ inputs.port_payload }}
+          echo ${{ steps.entity-id.outputs.value }}
           rm argocd/argocd-vcluster-${{ steps.entity-id.outputs.value }}-app.yaml
           rm -rf vcluster/${{ inputs.name }}
       - uses: EndBug/add-and-commit@v9
