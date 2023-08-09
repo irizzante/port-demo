@@ -2,9 +2,6 @@ name: Delete a vcluster
 on:
   workflow_dispatch:
     inputs:
-      name:
-        required: true
-        description: "The name of the vcluster"
       port_payload:
         required: false
         description: "The Port payload"
@@ -14,10 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Extract entity id
+        id: entity-id
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: "${{ inputs.port_payload }} | jq .payload.entity.identifier -r"
       - name: Delete vcluster
         run: |
           echo ${{ inputs.port_payload }}
-          rm argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
+          rm argocd/argocd-vcluster-${{ steps.entity-id.outputs.value }}-app.yaml
           rm -rf vcluster/${{ inputs.name }}
       - uses: EndBug/add-and-commit@v9
         with:
