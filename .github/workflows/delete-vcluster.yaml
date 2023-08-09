@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Delete vcluster
         run: |
+          echo ${{ inputs.port_payload }}
           rm argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
           rm -rf vcluster/${{ inputs.name }}
       - uses: EndBug/add-and-commit@v9
