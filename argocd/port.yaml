@@ -51,7 +51,7 @@ spec:
                         team: '["Platform"]'
                         properties:
                           gitops_repo: '"https://production.eng.it/gitlab/dirseresl/demo-crossplane/port-demo.git"'
-                          url: 'https://localtest.me'
+                          url: '"https://localtest.me"'
 
               - kind: apps/v1/deployments
                 selector:
