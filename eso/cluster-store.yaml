@@ -12,5 +12,5 @@ spec:
         SecretRef:
           accessToken:
             name: gitlab-secret
-            namespace: kube-system
+            namespace: crossplane-system
             key: token

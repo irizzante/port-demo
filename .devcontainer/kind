@@ -100,6 +100,6 @@ helm upgrade --install nginx --wait -n nginx -f "$workspaceDir"/argocd/values/ng
 
 kubectl create ns port
 
-kubectl -n kube-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
+kubectl -n crossplane-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
 
 kubectl apply -f "$workspaceDir"/platform/
