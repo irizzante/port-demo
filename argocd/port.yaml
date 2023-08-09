@@ -270,7 +270,7 @@ spec:
                         blueprint: '"cluster"'
                         team: '[.spec.team]'
                         properties:
-                          url: "https://" + .spec.id + "." + .spec.hostDomain
+                          url: .spec.id + "." + .spec.hostDomain
 
               - kind: v1/secrets
                 selector:
