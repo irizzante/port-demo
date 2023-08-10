@@ -102,4 +102,15 @@ kubectl create ns port
 
 kubectl -n crossplane-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
 
+cat << EOF | k apply -f-
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-provider
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  credentials: "{\"token\":\"$gitHubPat\",\"owner\":\"$gitHubOwner\"}"
+EOF
+
 kubectl apply -f "$workspaceDir"/platform/
