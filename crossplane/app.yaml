@@ -49,6 +49,7 @@ spec:
               kind: Application
               metadata:
                 name: #patched
+                namespace: argocd
                 finalizers:
                   - resources-finalizer.argocd.argoproj.io
               spec:
