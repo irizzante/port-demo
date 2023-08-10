@@ -42,7 +42,7 @@ spec:
           name: #patched
         spec:
           providerConfigRef:
-            name: #patched
+            name: kubernetes-provider
           forProvider:
             apiVersion: argoproj.io/v1alpha1
             kind: Application
