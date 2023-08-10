@@ -33,6 +33,26 @@ spec:
         toFieldPath: spec.forProvider.template[0].owner
       - fromFieldPath: spec.template.repository
         toFieldPath: spec.forProvider.template[0].repository
+    
+    - name: argocd-directory
+      base:
+        apiVersion: repo.github.upbound.io/v1alpha1
+        kind: RepositoryFile
+        metadata:
+          name: #patched
+        spec:
+          providerConfigRef:
+            name: github-provider
+          forProvider:
+            content: |
+              Put your Kubernetes manifests here
+            file: argocd/README
+            repositorySelector:
+              matchControllerRef: true
+
+      patches:
+      - fromFieldPath: spec.id
+        toFieldPath: metadata.name
 
     - name: argocd-app
       base:
