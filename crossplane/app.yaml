@@ -21,7 +21,7 @@ spec:
             visibility: public
             gitignoreTemplate: #patched
             template:
-              owner: #patched
+            - owner: #patched
               repository: #patched
 
       patches:
@@ -30,9 +30,9 @@ spec:
       - fromFieldPath: spec.language
         toFieldPath: spec.forProvider.gitignoreTemplate
       - fromFieldPath: spec.template.owner
-        toFieldPath: spec.forProvider.template.owner
+        toFieldPath: spec.forProvider.template[0].owner
       - fromFieldPath: spec.template.repository
-        toFieldPath: spec.forProvider.template.repository
+        toFieldPath: spec.forProvider.template[0].repository
 
     - name: argocd-app
       base:
