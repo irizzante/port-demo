@@ -27,6 +27,10 @@ spec:
       patches:
       - fromFieldPath: spec.id
         toFieldPath: metadata.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-github-repo"
       - fromFieldPath: spec.language
         toFieldPath: spec.forProvider.gitignoreTemplate
       - fromFieldPath: spec.template.owner
@@ -53,6 +57,10 @@ spec:
       patches:
       - fromFieldPath: spec.id
         toFieldPath: metadata.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-github-argocd-directory"
 
     - name: argocd-app
       base:
@@ -94,6 +102,10 @@ spec:
       patches:
       - fromFieldPath: spec.id
         toFieldPath: metadata.name
+        transforms:
+        - type: string
+          string:
+            fmt: "%s-argocd-app"
       - fromFieldPath: spec.id
         toFieldPath: spec.forProvider.manifest.metadata.name
       - fromFieldPath: spec.cluster
