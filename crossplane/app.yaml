@@ -44,30 +44,31 @@ spec:
           providerConfigRef:
             name: kubernetes-provider
           forProvider:
-            apiVersion: argoproj.io/v1alpha1
-            kind: Application
-            metadata:
-              name: #patched
-              finalizers:
-                - resources-finalizer.argocd.argoproj.io
-            spec:
-              destination:
+            manifest:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Application
+              metadata:
                 name: #patched
-                namespace: #patched
-              source:
-                path: argocd
-                repoURL: #patched
-                targetRevision: HEAD
-              sources: []
-              project: default
-              syncPolicy:
-                automated:
-                  prune: true
-                  selfHeal: true
-                  allowEmpty: true
-                syncOptions:
-                  - CreateNamespace=true
-                  - PruneLast=true
+                finalizers:
+                  - resources-finalizer.argocd.argoproj.io
+              spec:
+                destination:
+                  name: #patched
+                  namespace: #patched
+                source:
+                  path: argocd
+                  repoURL: #patched
+                  targetRevision: HEAD
+                sources: []
+                project: default
+                syncPolicy:
+                  automated:
+                    prune: true
+                    selfHeal: true
+                    allowEmpty: true
+                  syncOptions:
+                    - CreateNamespace=true
+                    - PruneLast=true
 
       patches:
       - type: CombineFromComposite
@@ -84,7 +85,7 @@ spec:
       - type: CombineFromComposite
         policy:
           fromFieldPath: Required
-        toFieldPath: spec.forProvider.metadata.name
+        toFieldPath: spec.forProvider.manifest.metadata.name
         combine:
           variables:
             - fromFieldPath: spec.id
@@ -93,9 +94,9 @@ spec:
           string:
             fmt: "%s-%s"
       - fromFieldPath: spec.cluster
-        toFieldPath: spec.forProvider.spec.destination.name
+        toFieldPath: spec.forProvider.manifest.spec.destination.name
       - fromFieldPath: spec.id
-        toFieldPath: spec.forProvider.spec.destination.namespace
+        toFieldPath: spec.forProvider.manifest.spec.destination.namespace
       - fromFieldPath: spec.gitOpsRepo
-        toFieldPath: spec.forProvider.spec.source.repoURL
+        toFieldPath: spec.forProvider.manifest.spec.source.repoURL
 
