@@ -1,0 +1,13 @@
+apiVersion: irizzant.it/v1alpha1
+kind: App
+metadata:
+    name: test
+spec:
+  id: test
+  language: Java
+  template:
+    owner: microsoft
+    repository: vscode-remote-try-java
+  cluster: test
+  gitOpsRepo: https://github.com/irizzante/test.git
+

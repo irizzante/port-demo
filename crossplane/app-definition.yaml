@@ -35,12 +35,12 @@ spec:
                   owner:
                     type: string
                     description: Template repository owner
-                  url:
+                  repository:
                     type: string
-                    description: Template repository url
+                    description: Template repository name
                 required:
                 - owner
-                - url
+                - repository
               cluster:
                 type: string
                 description: ID of the cluster to deploy the app to

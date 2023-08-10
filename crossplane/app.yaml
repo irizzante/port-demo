@@ -25,17 +25,8 @@ spec:
               repository: #patched
 
       patches:
-      - type: CombineFromComposite
-        policy:
-          fromFieldPath: Required
+      - fromFieldPath: spec.id
         toFieldPath: metadata.name
-        combine:
-          variables:
-            - fromFieldPath: spec.id
-            - fromFieldPath: spec.language
-          strategy: string
-          string:
-            fmt: "%s-%s"
       - fromFieldPath: spec.language
         toFieldPath: spec.forProvider.gitignoreTemplate
       - fromFieldPath: spec.template.owner
