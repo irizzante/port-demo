@@ -6,7 +6,7 @@ spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: irizzant.it/v1alpha1
-    kind: XApps
+    kind: XApp
   resources:
     - name: github-repo
       base:
