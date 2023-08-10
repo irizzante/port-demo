@@ -48,8 +48,7 @@ spec:
             content: |
               Put your Kubernetes manifests here
             file: argocd/README
-            repositoryRef:
-              name: #patched
+            repository: #patched
 
       patches:
       - fromFieldPath: spec.id
@@ -59,7 +58,7 @@ spec:
           string:
             fmt: "%s-github-argocd-directory"
       - fromFieldPath: spec.id
-        toFieldPath: spec.forProvider.repositoryRef.name
+        toFieldPath: spec.forProvider.repository
 
     - name: argocd-app
       base:
