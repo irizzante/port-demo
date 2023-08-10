@@ -27,10 +27,6 @@ spec:
       patches:
       - fromFieldPath: spec.id
         toFieldPath: metadata.name
-        transforms:
-        - type: string
-          string:
-            fmt: "%s-github-repo"
       - fromFieldPath: spec.language
         toFieldPath: spec.forProvider.gitignoreTemplate
       - fromFieldPath: spec.template.owner
@@ -48,11 +44,12 @@ spec:
           providerConfigRef:
             name: github-provider
           forProvider:
+            overwriteOnCreate: true
             content: |
               Put your Kubernetes manifests here
             file: argocd/README
-            repositorySelector:
-              matchControllerRef: true
+            repositoryRef:
+              name: #patched
 
       patches:
       - fromFieldPath: spec.id
@@ -61,6 +58,8 @@ spec:
         - type: string
           string:
             fmt: "%s-github-argocd-directory"
+      - fromFieldPath: spec.id
+        toFieldPath: spec.forProvider.repositoryRef.name
 
     - name: argocd-app
       base:
