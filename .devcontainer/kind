@@ -78,11 +78,9 @@ crossplane-stable/crossplane \
 
 kubectl wait --for condition=ready pod --namespace crossplane-system --all --timeout 300s
 
-kubectl apply -f https://raw.githubusercontent.com/irizzante/crossplane/main/crossplane/configurations/gitops.yaml
+kubectl apply -f crossplane/providers.yaml
 
 sleep 10
-
-kubectl delete configuration gitops
 
 kubectl wait --for condition=ready pod --namespace crossplane-system --all --timeout 300s
 
