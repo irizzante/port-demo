@@ -95,9 +95,6 @@ kubectl create clusterrolebinding provider-helm-admin-binding --clusterrole clus
 helm repo add argo https://argoproj.github.io/argo-helm
 helm upgrade --install argocd --wait -n argocd -f "$workspaceDir"/argocd/values/argocd.yaml --create-namespace argo/argo-cd --version 5.41.1
 
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm upgrade --install nginx --wait -n nginx -f "$workspaceDir"/argocd/values/nginx.yaml --create-namespace ingress-nginx/ingress-nginx
-
 kubectl create ns port
 
 kubectl -n crossplane-system create secret generic gitlab-secret --from-literal=token="$gitlabToken"
