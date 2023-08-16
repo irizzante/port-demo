@@ -4,6 +4,5 @@ metadata:
   name: provider-github
   annotations:
       argocd.argoproj.io/sync-wave: "-5"
-      argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   package: xpkg.upbound.io/coopnorge/provider-github:v0.3.2
