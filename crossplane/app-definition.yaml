@@ -32,7 +32,11 @@ spec:
               cluster:
                 type: string
                 description: ID of the cluster to deploy the app to
+              team:
+                type: string
+                description: Team the app belongs to
             required:
             - id
             - language
             - cluster
+            - team
