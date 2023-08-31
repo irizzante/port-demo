@@ -291,7 +291,7 @@ spec:
                         blueprint: '"app"'
                         team: '.spec.team'
                         properties:
-                          git_repo: '"https://github.com/irizzante/" + .spec.id'
+                          git_repo: '"https://github.com/irizzante/" + .spec.id + ".git"'
                           language: '.spec.language'
                         relations:
                           cluster: .spec.cluster
