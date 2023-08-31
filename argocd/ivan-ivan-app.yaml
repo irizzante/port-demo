@@ -1,0 +1,9 @@
+apiVersion: irizzant.it/v1alpha1
+kind: App
+metadata:
+    name: ivan
+spec:
+  id: ivan
+  language: Python
+  cluster: ivan
+  team: Team Batman
