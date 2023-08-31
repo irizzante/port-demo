@@ -26,11 +26,11 @@ jobs:
       - name: Create app
         run: |
           cp templates/app.yaml argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
-          yq || true
-          sed -i 's@CLUSTER_NAME@${{ inputs.environment }}@g' argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
-          sed -i 's@APP_NAME@${{ inputs.name }}@g' argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
-          sed -i 's@TEAM@${{ inputs.team }}@g' argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
-          sed -i 's@LANGUAGE@${{ inputs.language }}@g' argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
+          yq --inplace ".metadata.name = \"${{ inputs.name }}\"" argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
+          yq --inplace ".spec.id = \"${{ inputs.name }}\"" argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
+          yq --inplace ".spec.language = \"${{ inputs.language }}\"" argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
+          yq --inplace ".spec.cluster = \"${{ inputs.environment }}\"" argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
+          yq --inplace ".spec.team = \"${{ inputs.team }}\"" argocd/${{ inputs.name }}-${{ inputs.environment }}-app.yaml
       - uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
