@@ -20,7 +20,7 @@ jobs:
         id: environment
         uses: sergeysova/jq-action@v2
         with:
-          cmd: echo '${{ inputs.port_payload }}' | jq .payload.entity.environment -r
+          cmd: echo '${{ inputs.port_payload }}' | jq .payload.entity.properties.environment -r
 
       - name: Delete app
         run: |
