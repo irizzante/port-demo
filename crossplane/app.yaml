@@ -29,10 +29,21 @@ spec:
         toFieldPath: metadata.name
       - fromFieldPath: spec.language
         toFieldPath: spec.forProvider.gitignoreTemplate
-      - fromFieldPath: spec.template.owner
+      - type: FromCompositeFieldPath
+        fromFieldPath: spec.language
         toFieldPath: spec.forProvider.template[0].owner
-      - fromFieldPath: spec.template.repository
+        transforms:
+        - type: map
+          map:
+            Java: microsoft
+            Python: microsoft
+      - fromFieldPath: spec.language
         toFieldPath: spec.forProvider.template[0].repository
+        transforms:
+        - type: map
+          map:
+            Java: vscode-remote-try-java
+            Python: vscode-remote-try-python
     
     - name: argocd-directory
       base:
@@ -110,6 +121,10 @@ spec:
         toFieldPath: spec.forProvider.manifest.spec.destination.name
       - fromFieldPath: spec.id
         toFieldPath: spec.forProvider.manifest.spec.destination.namespace
-      - fromFieldPath: spec.gitOpsRepo
+      - fromFieldPath: spec.id
         toFieldPath: spec.forProvider.manifest.spec.source.repoURL
+        transforms:
+        - type: string
+          string:
+            fmt: "https://github.com/irizzante/%s.git"
 

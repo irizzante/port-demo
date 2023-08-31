@@ -29,27 +29,10 @@ spec:
                 enum:
                 - Java
                 description: Programming language
-              template:
-                type: object
-                properties:
-                  owner:
-                    type: string
-                    description: Template repository owner
-                  repository:
-                    type: string
-                    description: Template repository name
-                required:
-                - owner
-                - repository
               cluster:
                 type: string
                 description: ID of the cluster to deploy the app to
-              gitOpsRepo:
-                type: string
-                description: URL of the Git repo for GitOps
             required:
             - id
             - language
-            - template
             - cluster
-            - gitOpsRepo
