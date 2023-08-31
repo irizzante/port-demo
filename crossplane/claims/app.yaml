@@ -5,4 +5,5 @@ metadata:
 spec:
   id: test
   language: Java
-  cluster: test
+  cluster: ivan
+  team: Team Batman
