@@ -28,6 +28,7 @@ spec:
                 type: string
                 enum:
                 - Java
+                - Python
                 description: Programming language
               cluster:
                 type: string
