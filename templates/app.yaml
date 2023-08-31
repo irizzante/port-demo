@@ -1,0 +1,9 @@
+apiVersion: irizzant.it/v1alpha1
+kind: App
+metadata:
+    name: APP_NAME
+spec:
+  id: APP_NAME
+  language: LANGUAGE
+  cluster: CLUSTER_NAME
+  team: TEAM
