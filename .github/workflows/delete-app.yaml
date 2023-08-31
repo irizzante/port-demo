@@ -1,0 +1,31 @@
+name: Delete an app
+on:
+  workflow_dispatch:
+    inputs:
+      port_payload:
+        required: false
+        description: "The Port payload"
+      
+jobs:
+  delete-vcluster:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract entity id
+        id: entity-id
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: echo '${{ inputs.port_payload }}' | jq .payload.entity.identifier -r
+      - name: Extract environment
+        id: environment
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: echo '${{ inputs.port_payload }}' | jq .payload.entity.environment -r
+
+      - name: Delete app
+        run: |
+          echo ${{ steps.entity-id.outputs.value }}
+          rm argocd/${{ steps.entity-id.outputs.value }}-${{ steps.environment.outputs.value }}-app.yaml
+      - uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
