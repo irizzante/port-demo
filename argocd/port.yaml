@@ -271,7 +271,6 @@ spec:
                         team: '[.spec.team]'
                         properties:
                           url: '"https://" + .spec.id + "." + .spec.hostDomain'
-
               - kind: v1/secrets
                 selector:
                   query: '(.metadata.namespace | startswith("crossplane")) and (.type == "connection.crossplane.io/v1alpha1") and (.data | has("config"))'
@@ -283,6 +282,19 @@ spec:
                         blueprint: '"cluster"'
                         properties:
                           kubeconfig: .data.config | @base64d
+              - kind: irizzant.it/v1alpha1/App
+                port:
+                  entity:
+                    mappings:
+                      - identifier: .spec.id
+                        title: .spec.id
+                        blueprint: '"app"'
+                        team: '.spec.team'
+                        properties:
+                          git_repo: '"https://github.com/irizzante/" + .spec.id'
+                          language: '.spec.language'
+                        relations:
+                          cluster: .spec.cluster
                         
   project: default
   syncPolicy:
