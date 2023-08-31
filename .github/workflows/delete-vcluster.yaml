@@ -20,7 +20,7 @@ jobs:
       - name: Delete vcluster
         run: |
           echo ${{ steps.entity-id.outputs.value }}
-          rm argocd/argocd-vcluster-${{ steps.entity-id.outputs.value }}-app.yaml
+          rm argocd/vcluster-apps-${{ steps.entity-id.outputs.value }}-app.yaml
           rm -rf vcluster/${{ steps.entity-id.outputs.value }}
       - uses: EndBug/add-and-commit@v9
         with:
