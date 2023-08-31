@@ -23,12 +23,12 @@ jobs:
       - name: Create cluster
         run: |
           mkdir -p vcluster/${{ inputs.name }}
-          cp templates/argocd-vcluster-app.yaml argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
-          sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/argocd-vcluster-${{ inputs.name }}-app.yaml
+          cp templates/argocd-vcluster-app.yaml argocd/vcluster-apps-${{ inputs.name }}-app.yaml
+          sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' argocd/vcluster-apps-${{ inputs.name }}-app.yaml
           cp templates/vcluster.yaml vcluster/${{ inputs.name }}/
-          find vcluster/${{ inputs.name }} -type f -exec sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' {} \;
-          find vcluster/${{ inputs.name }} -type f -exec sed -i 's@HOST_DOMAIN@${{ inputs.domain }}@g' {} \;
-          find vcluster/${{ inputs.name }} -type f -exec sed -i 's@TEAM@${{ inputs.team }}@g' {} \;
+          sed -i 's@CLUSTER_NAME@${{ inputs.name }}@g' vcluster/${{ inputs.name }}/vcluster.yaml
+          sed -i 's@HOST_DOMAIN@${{ inputs.domain }}@g' vcluster/${{ inputs.name }}/vcluster.yaml
+          sed -i 's@TEAM@${{ inputs.team }}@g' vcluster/${{ inputs.name }}/vcluster.yaml
       - uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
