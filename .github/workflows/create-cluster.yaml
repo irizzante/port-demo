@@ -22,16 +22,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create cluster
         run: |
-          mkdir -p vcluster/${{ inputs.name }}
-          cp templates/argocd-vcluster-app.yaml argocd/vcluster-apps-${{ inputs.name }}-app.yaml
-          yq --inplace ".metadata.name = \"vcluster-apps-${{ inputs.name }}\"" argocd/vcluster-apps-${{ inputs.name }}-app.yaml
-          yq --inplace ".spec.source.path = \"vcluster/${{ inputs.name }}\"" argocd/vcluster-apps-${{ inputs.name }}-app.yaml
-          cp templates/vcluster.yaml vcluster/${{ inputs.name }}/
-          yq --inplace ".metadata.name = \"${{ inputs.name }}\"" vcluster/${{ inputs.name }}/vcluster.yaml
-          yq --inplace ".spec.writeConnectionSecretToRef.name = \"${{ inputs.name }}-vc\"" vcluster/${{ inputs.name }}/vcluster.yaml
-          yq --inplace ".spec.id = \"${{ inputs.name }}\"" vcluster/${{ inputs.name }}/vcluster.yaml
-          yq --inplace ".spec.hostDomain = \"${{ inputs.domain }}\"" vcluster/${{ inputs.name }}/vcluster.yaml
-          yq --inplace ".spec.team = \"${{ inputs.team }}\"" vcluster/${{ inputs.name }}/vcluster.yaml
+          cp templates/vcluster.yaml vclusters/${{ inputs.name }}.yaml
+          yq --inplace ".metadata.name = \"${{ inputs.name }}\"" vclusters/${{ inputs.name }}.yaml
+          yq --inplace ".spec.writeConnectionSecretToRef.name = \"${{ inputs.name }}-vc\"" vclusters/${{ inputs.name }}.yaml
+          yq --inplace ".spec.id = \"${{ inputs.name }}\"" vclusters/${{ inputs.name }}.yaml
+          yq --inplace ".spec.hostDomain = \"${{ inputs.domain }}\"" vclusters/${{ inputs.name }}.yaml
+          yq --inplace ".spec.team = \"${{ inputs.team }}\"" vclusters/${{ inputs.name }}.yaml
       - uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actions
