@@ -6,7 +6,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: apps
+    namespace: crossplane-system
     server: 'https://kubernetes.default.svc'
   source:
     path: apps
