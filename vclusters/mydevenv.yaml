@@ -1,0 +1,10 @@
+apiVersion: irizzant.it/v1alpha1
+kind: VCluster
+metadata:
+  name: mydevenv
+spec:
+  writeConnectionSecretToRef:
+    name: mydevenv-vc
+  id: mydevenv
+  hostDomain: 172.19.0.2.nip.io
+  team: Team Batman
