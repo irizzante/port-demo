@@ -36,6 +36,8 @@ spec:
                 host: #patched
               isolation:
                 enabled: true
+                networkPolicy:
+                  enabled: false
               sync:
                 nodes:
                   enabled: true
