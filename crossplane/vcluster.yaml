@@ -44,8 +44,6 @@ spec:
                   enabled: true
                 ingresses:
                   enabled: true
-                networkpolicies:
-                  enabled: true
               syncer:
                 extraArgs: [] # patched
           writeConnectionSecretToRef:
