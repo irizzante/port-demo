@@ -36,8 +36,6 @@ spec:
                 host: #patched
               isolation:
                 enabled: true
-                networkPolicy:
-                  enabled: false
                 limitRange:
                   enabled: true
                   default:
