@@ -38,6 +38,8 @@ spec:
                 enabled: true
                 networkPolicy:
                   enabled: false
+                limitRange:
+                  enabled: false
               sync:
                 nodes:
                   enabled: true
