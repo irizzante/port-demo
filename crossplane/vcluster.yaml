@@ -39,7 +39,15 @@ spec:
                 networkPolicy:
                   enabled: false
                 limitRange:
-                  enabled: false
+                  enabled: true
+                  default:
+                    ephemeral-storage: 8Gi
+                    memory: 4Gi
+                    cpu: "4"
+                  defaultRequest:
+                    ephemeral-storage: 3Gi
+                    memory: 128Mi
+                    cpu: 100m
               sync:
                 nodes:
                   enabled: true
