@@ -35,7 +35,7 @@ spec:
                 ingressClassName: nginx
                 host: #patched
               isolation:
-                enabled: true
+                enabled: false
                 networkPolicy:
                   enabled: false
               sync:
