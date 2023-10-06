@@ -4,3 +4,9 @@ grafana:
     ingressClassName: nginx
     hosts:
     - grafana.localtest.me
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+    - prometheus.localtest.me
