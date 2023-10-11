@@ -25,6 +25,26 @@ networking:
   disableDefaultCNI: true
 nodes:
 - role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: ClusterConfiguration
+    controllerManager:
+      extraArgs:
+        bind-address: 0.0.0.0
+        #secure-port: "0"
+        #port: "10257"
+    etcd:
+      local:
+        extraArgs:
+          listen-metrics-urls: http://0.0.0.0:2381
+    scheduler:
+      extraArgs:
+        bind-address: 0.0.0.0
+        #secure-port: "0"
+        #port: "10259"
+  - |
+    kind: KubeProxyConfiguration
+    metricsBindAddress: 0.0.0.0
   extraMounts:
   - containerPath: /var/lib/kubelet/config.json
     hostPath: "$HOME/.docker/config.json"
