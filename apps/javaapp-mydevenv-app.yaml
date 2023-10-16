@@ -1,9 +1,0 @@
-apiVersion: irizzant.it/v1alpha1
-kind: App
-metadata:
-  name: javaapp
-spec:
-  id: javaapp
-  language: Java
-  cluster: mydevenv
-  team: Team Batman
