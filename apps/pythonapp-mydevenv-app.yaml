@@ -1,9 +1,0 @@
-apiVersion: irizzant.it/v1alpha1
-kind: App
-metadata:
-  name: pythonapp
-spec:
-  id: pythonapp
-  language: Python
-  cluster: mydevenv
-  team: Team Batman
