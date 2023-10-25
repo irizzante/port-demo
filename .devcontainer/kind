@@ -25,9 +25,6 @@ networking:
   disableDefaultCNI: true
   kubeProxyMode: none
 nodes:
-- role: worker
-- role: worker
-- role: worker
 - role: control-plane
   kubeadmConfigPatches:
   - |
@@ -80,6 +77,8 @@ hubble:
   enabled: true
   relay:
     enabled: true
+operator:
+  replicas: 1
 EOF
 
 kubectl wait --for condition=ready pod --namespace kube-system --all --timeout 300s
