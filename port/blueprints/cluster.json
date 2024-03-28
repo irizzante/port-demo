@@ -1,0 +1,21 @@
+[
+    {
+        "identifier": "management",
+        "title": "management",
+        "icon": null,
+        "blueprint": "cluster",
+        "team": [
+            "Platform"
+        ],
+        "properties": {
+            "gitops_repo": "https://production.eng.it/gitlab/dirseresl/demo-crossplane/port-demo.git",
+            "kubeconfig": null,
+            "url": "https://localtest.me"
+        },
+        "relations": {},
+        "createdAt": "2023-08-31T14:51:43.416Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-08-31T14:51:43.416Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    }
+]

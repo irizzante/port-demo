@@ -1,0 +1,482 @@
+[
+    {
+        "identifier": "prometheus-argocd-management",
+        "title": "prometheus",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true",
+                    "ServerSideApply=true"
+                ]
+            },
+            "gitRepo": null,
+            "gitPath": null,
+            "syncStatus": "Synced",
+            "gitRev": null,
+            "Namespace": "argocd",
+            "DestinationNamespace": "monitoring",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "monitoring-management",
+                "title": "monitoring"
+            },
+            "workload": [
+                {
+                    "identifier": "prometheus-prometheus-node-exporter-DaemonSet-monitoring-management",
+                    "title": "prometheus-prometheus-node-exporter"
+                }
+            ]
+        },
+        "createdAt": "2023-10-06T06:21:55.825Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T11:45:20.105Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "eso-cluster-store-argocd-management",
+        "title": "eso-cluster-store",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": "https://github.com/irizzante/port-demo.git",
+            "gitPath": "eso",
+            "syncStatus": "Synced",
+            "gitRev": "9fba419866d307e0e3005b09869a91833a8e3366",
+            "Namespace": "argocd",
+            "DestinationNamespace": "eso",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "eso-management",
+                "title": "eso"
+            },
+            "workload": []
+        },
+        "createdAt": "2023-08-04T07:55:39.192Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T15:00:59.614Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "nginx-argocd-management",
+        "title": "nginx",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": null,
+            "gitPath": null,
+            "syncStatus": "Synced",
+            "gitRev": null,
+            "Namespace": "argocd",
+            "DestinationNamespace": "nginx",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "nginx-management",
+                "title": "nginx"
+            },
+            "workload": [
+                {
+                    "identifier": "nginx-ingress-nginx-controller-Deployment-nginx-management",
+                    "title": "nginx-ingress-nginx-controller"
+                }
+            ]
+        },
+        "createdAt": "2023-08-31T16:04:36.727Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T11:45:10.699Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "vclusters-argocd-management",
+        "title": "vclusters",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": "https://github.com/irizzante/port-demo.git",
+            "gitPath": "vclusters",
+            "syncStatus": "Synced",
+            "gitRev": "907c2af765439a3171c789afdc91e4f7ebdb7189",
+            "Namespace": "argocd",
+            "DestinationNamespace": "crossplane-system",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "crossplane-system-management",
+                "title": "crossplane-system"
+            },
+            "workload": []
+        },
+        "createdAt": "2023-09-01T07:47:35.940Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-17T11:58:49.825Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "argocd-argocd-management",
+        "title": "argocd",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": null,
+            "gitPath": null,
+            "syncStatus": "Synced",
+            "gitRev": null,
+            "Namespace": "argocd",
+            "DestinationNamespace": "argocd",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "argocd-management",
+                "title": "argocd"
+            },
+            "workload": [
+                {
+                    "identifier": "argocd-applicationset-controller-Deployment-argocd-management",
+                    "title": "argocd-applicationset-controller"
+                }
+            ]
+        },
+        "createdAt": "2023-08-04T07:55:42.915Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T11:50:46.740Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "crossplane-argocd-management",
+        "title": "crossplane",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "CreateNamespace=true",
+                    "PruneLast=true"
+                ]
+            },
+            "gitRepo": "https://charts.crossplane.io/stable",
+            "gitPath": null,
+            "syncStatus": "Synced",
+            "gitRev": "1.13.2",
+            "Namespace": "argocd",
+            "DestinationNamespace": "crossplane-system",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "crossplane-system-management",
+                "title": "crossplane-system"
+            },
+            "workload": [
+                {
+                    "identifier": "crossplane-Deployment-crossplane-system-management",
+                    "title": "crossplane"
+                }
+            ]
+        },
+        "createdAt": "2023-08-09T10:58:45.391Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T11:50:46.990Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "eso-argocd-management",
+        "title": "eso",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": null,
+            "gitPath": null,
+            "syncStatus": "Synced",
+            "gitRev": null,
+            "Namespace": "argocd",
+            "DestinationNamespace": "eso",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "eso-management",
+                "title": "eso"
+            },
+            "workload": [
+                {
+                    "identifier": "eso-external-secrets-Deployment-eso-management",
+                    "title": "eso-external-secrets"
+                }
+            ]
+        },
+        "createdAt": "2023-08-04T07:55:41.499Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T11:45:10.451Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "port-exporter-argocd-management",
+        "title": "port-exporter",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": "https://port-labs.github.io/helm-charts",
+            "gitPath": null,
+            "syncStatus": "Synced",
+            "gitRev": "0.1.18",
+            "Namespace": "argocd",
+            "DestinationNamespace": "port",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "port-management",
+                "title": "port"
+            },
+            "workload": [
+                {
+                    "identifier": "port-exporter-port-k8s-exporter-Deployment-port-management",
+                    "title": "port-exporter-port-k8s-exporter"
+                }
+            ]
+        },
+        "createdAt": "2023-08-04T07:55:42.666Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T11:45:09.084Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "platform-argocd-management",
+        "title": "platform",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "allowEmpty": true,
+                    "prune": true,
+                    "selfHeal": true
+                }
+            },
+            "gitRepo": "https://github.com/irizzante/port-demo.git",
+            "gitPath": "argocd",
+            "syncStatus": "Synced",
+            "gitRev": "9fba419866d307e0e3005b09869a91833a8e3366",
+            "Namespace": "argocd",
+            "DestinationNamespace": "argocd",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "argocd-management",
+                "title": "argocd"
+            },
+            "workload": []
+        },
+        "createdAt": "2023-08-04T07:55:38.186Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T15:01:00.394Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "crossplane-resources-argocd-management",
+        "title": "crossplane-resources",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "PruneLast=true",
+                    "CreateNamespace=true"
+                ]
+            },
+            "gitRepo": "https://github.com/irizzante/port-demo.git",
+            "gitPath": "crossplane",
+            "syncStatus": "OutOfSync",
+            "gitRev": "9fba419866d307e0e3005b09869a91833a8e3366",
+            "Namespace": "argocd",
+            "DestinationNamespace": "crossplane-system",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "crossplane-system-management",
+                "title": "crossplane-system"
+            },
+            "workload": []
+        },
+        "createdAt": "2023-08-09T10:58:46.301Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:32:14.539Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "apps-argocd-management",
+        "title": "apps",
+        "icon": null,
+        "blueprint": "argocdApp",
+        "team": [],
+        "properties": {
+            "syncPolicy": {
+                "automated": {
+                    "allowEmpty": true,
+                    "prune": true,
+                    "selfHeal": true
+                },
+                "syncOptions": [
+                    "CreateNamespace=true",
+                    "PruneLast=true"
+                ]
+            },
+            "gitRepo": "https://github.com/irizzante/port-demo.git",
+            "gitPath": "apps",
+            "syncStatus": "Synced",
+            "gitRev": "907c2af765439a3171c789afdc91e4f7ebdb7189",
+            "Namespace": "argocd",
+            "DestinationNamespace": "crossplane-system",
+            "Cluster": "management"
+        },
+        "relations": {
+            "argocdProject": {
+                "identifier": "default-argocd-management",
+                "title": "default"
+            },
+            "destinationNamespace": {
+                "identifier": "crossplane-system-management",
+                "title": "crossplane-system"
+            },
+            "workload": []
+        },
+        "createdAt": "2023-08-31T16:16:45.610Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-17T11:56:50.581Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    }
+]

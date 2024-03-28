@@ -1,0 +1,22 @@
+{
+    "identifier": "delete_dev_environment",
+    "title": "Delete dev environment",
+    "icon": "GKE",
+    "userInputs": {
+      "properties": {},
+      "required": [],
+      "order": []
+    },
+    "invocationMethod": {
+      "type": "GITHUB",
+      "org": "irizzante",
+      "repo": "port-demo",
+      "workflow": "delete-vcluster.yaml",
+      "omitUserInputs": true,
+      "omitPayload": false,
+      "reportWorkflowStatus": true
+    },
+    "trigger": "DELETE",
+    "description": "Delete developer environment",
+    "requiredApproval": false
+  }

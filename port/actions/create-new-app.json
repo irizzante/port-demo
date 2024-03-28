@@ -1,0 +1,78 @@
+{
+    "identifier": "create_a_new_app",
+    "title": "Create a new App",
+    "icon": "AppRunner",
+    "userInputs": {
+      "properties": {
+        "environment": {
+          "icon": "Cluster",
+          "title": "environment",
+          "type": "string",
+          "blueprint": "cluster",
+          "format": "entity",
+          "dataset": {
+            "combinator": "and",
+            "rules": [
+              {
+                "property": "$team",
+                "operator": "containsAny",
+                "value": {
+                  "jqQuery": "[.user.teams[].name]"
+                }
+              }
+            ]
+          }
+        },
+        "language": {
+          "icon": "DefaultProperty",
+          "title": "language",
+          "type": "string",
+          "default": "Java",
+          "enum": [
+            "Java",
+            "Python"
+          ],
+          "enumColors": {
+            "Java": "lightGray",
+            "Python": "lightGray"
+          }
+        },
+        "team": {
+          "title": "Team",
+          "description": "The team the app belongs to",
+          "type": "string",
+          "format": "team"
+        },
+        "name": {
+          "icon": "DefaultProperty",
+          "title": "name",
+          "description": "App name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "environment",
+        "team",
+        "language",
+        "name"
+      ],
+      "order": [
+        "name",
+        "language",
+        "team",
+        "environment"
+      ]
+    },
+    "invocationMethod": {
+      "type": "GITHUB",
+      "org": "irizzante",
+      "repo": "port-demo",
+      "workflow": "create-app.yaml",
+      "omitUserInputs": false,
+      "omitPayload": false,
+      "reportWorkflowStatus": true
+    },
+    "trigger": "CREATE",
+    "description": "Create a new application in any programming language",
+    "requiredApproval": false
+  }

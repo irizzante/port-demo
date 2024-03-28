@@ -1,0 +1,21 @@
+{
+    "identifier": "delete_app",
+    "title": "Delete app",
+    "icon": "AppRunner",
+    "userInputs": {
+      "properties": {},
+      "required": []
+    },
+    "invocationMethod": {
+      "type": "GITHUB",
+      "org": "irizzante",
+      "repo": "port-demo",
+      "workflow": "delete-app.yaml",
+      "omitUserInputs": true,
+      "omitPayload": false,
+      "reportWorkflowStatus": true
+    },
+    "trigger": "DELETE",
+    "description": "Delete an app",
+    "requiredApproval": false
+  }

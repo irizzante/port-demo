@@ -1,0 +1,264 @@
+[
+    {
+        "identifier": "monitoring-management",
+        "title": "monitoring",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:26:25Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "monitoring"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-10-06T06:21:44.511Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:47.767Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "tigera-operator-management",
+        "title": "tigera-operator",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T08:53:32Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "tigera-operator",
+                "name": "tigera-operator"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:40.338Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T08:58:45.137Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "port-management",
+        "title": "port",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:23:30Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "port"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:40.139Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:48.311Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "nginx-management",
+        "title": "nginx",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:23:43Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "nginx"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:39.914Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:48.063Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "local-path-storage-management",
+        "title": "local-path-storage",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:18:24Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "local-path-storage"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:39.708Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:47.340Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "eso-management",
+        "title": "eso",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:25:43Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "eso"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:38.830Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:46.618Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "default-management",
+        "title": "default",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:18:20Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "default"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:38.485Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:45.336Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "calico-system-management",
+        "title": "calico-system",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T08:53:57Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "calico-system",
+                "name": "calico-system",
+                "pod-security.kubernetes.io/enforce": "privileged",
+                "pod-security.kubernetes.io/enforce-version": "latest"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:37.883Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T08:58:41.670Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "calico-apiserver-management",
+        "title": "calico-apiserver",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T08:55:22Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "calico-apiserver",
+                "name": "calico-apiserver",
+                "pod-security.kubernetes.io/enforce": "privileged",
+                "pod-security.kubernetes.io/enforce-version": "latest"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:37.675Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T08:58:41.443Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "crossplane-system-management",
+        "title": "crossplane-system",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:18:54Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "crossplane-system",
+                "name": "crossplane-system"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:38.166Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:44.977Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    },
+    {
+        "identifier": "argocd-management",
+        "title": "argocd",
+        "icon": null,
+        "blueprint": "namespace",
+        "team": [],
+        "properties": {
+            "creationTimestamp": "2023-10-25T16:20:02Z",
+            "labels": {
+                "kubernetes.io/metadata.name": "argocd",
+                "name": "argocd"
+            }
+        },
+        "relations": {
+            "Cluster": {
+                "identifier": "management",
+                "title": "management"
+            }
+        },
+        "createdAt": "2023-08-04T07:55:37.464Z",
+        "createdBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z",
+        "updatedAt": "2023-10-25T16:27:44.557Z",
+        "updatedBy": "F6d5idybdPEUZRTItcJz9TbFMZQS9k2z"
+    }
+]
