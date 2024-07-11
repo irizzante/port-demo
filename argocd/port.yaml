@@ -10,7 +10,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://port-labs.github.io/helm-charts'
-    targetRevision: 0.1.18
+    targetRevision: 0.2.31
     chart: port-k8s-exporter
     helm:
       values: |
