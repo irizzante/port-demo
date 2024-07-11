@@ -16,6 +16,10 @@ spec:
       values: |
         portBaseUrl: https://api.getport.io
         stateKey: management
+        eventListenerType: POLLING
+        extraEnv:
+        - name: CLUSTER_NAME
+          value: management
         resyncInterval: 1
         # Base Kubernetes configuration
         secret:
