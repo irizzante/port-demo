@@ -14,9 +14,7 @@ spec:
     chart: port-k8s-exporter
     helm:
       values: |
-        portBaseUrl: https://api.getport.io
         stateKey: management
-        eventListenerType: POLLING
         extraEnv:
         - name: CLUSTER_NAME
           value: management
