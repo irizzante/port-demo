@@ -83,6 +83,22 @@ EOF
 
 kubectl wait --for condition=ready pod --namespace kube-system --all --timeout 300s
 
+kubectl create ns bitwarden
+
+cat << EOF | kubectl apply -f-
+apiVersion: v1
+stringData:
+  BW_CLIENTID: "$bitwardenClientId"
+  BW_CLIENTSECRET: "$bitwardenClientSecret"
+  BW_HOST: "$bitwardenHost"
+  BW_PASSWORD: "$bitwardenPassword"
+kind: Secret
+metadata:
+  name: bitwarden-cli
+  namespace: bitwarden
+type: Opaque
+EOF
+
 helm repo add crossplane-stable https://charts.crossplane.io/stable
 helm repo update
 helm install crossplane \
@@ -126,3 +142,4 @@ stringData:
 EOF
 
 kubectl apply -f "$workspaceDir"/platform/
+
