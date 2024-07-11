@@ -14,6 +14,7 @@ spec:
     chart: port-k8s-exporter
     helm:
       values: |
+        portBaseUrl: https://api.getport.io
         stateKey: management
         resyncInterval: 1
         # Base Kubernetes configuration
