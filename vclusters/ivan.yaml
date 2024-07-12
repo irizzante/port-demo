@@ -1,0 +1,10 @@
+apiVersion: irizzant.it/v1alpha1
+kind: VCluster
+metadata:
+  name: ivan
+spec:
+  writeConnectionSecretToRef:
+    name: ivan-vc
+  id: ivan
+  hostDomain: 172.18.0.2.nip.io
+  team: Team Batman
