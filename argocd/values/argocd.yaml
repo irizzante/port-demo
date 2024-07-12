@@ -60,6 +60,7 @@ configs:
 
   cm:
     application.resourceTrackingMethod: annotation
+    timeout.reconciliation: 5
     resource.customizations: |
       argoproj.io/Application:
         health.lua: |
